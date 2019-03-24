@@ -1,0 +1,35 @@
+{% extends "teacher/base.html" %}
+
+{% block head_title_block %}
+管理视频
+{% endblock %}
+
+{% block title_block %}
+<h3>管理视频</h3>
+{% endblock %}
+
+{% block navbar_block %}
+ <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="{% url 'video:video_manage' video.pk %}">返回</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block content_block%}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <form action="{% url 'video:video_title_modify' video.pk %}" method="POST">
+                {% csrf_token %}
+                <label>原视频标题：{{ video.title }}</label><br><br>
+                <label for="title">视频标题：</label>
+                <input type="text" name="title"><br><br>
+                <input type="submit" class='btn btn-primary' value="确定修改">
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

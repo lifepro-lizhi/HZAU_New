@@ -1,0 +1,47 @@
+{% extends "teacher/base.html" %}
+
+{% block head_title_block %}
+编辑选择题
+{% endblock %}
+
+{% block title_block %}
+<h3>编辑选择题</h3>
+{% endblock %}
+
+{% block navbar_block %}
+ <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="{% url 'examination:paper_preview' question.paper.pk %}">返回</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block content_block%}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <h4>试卷：&nbsp;&nbsp;&nbsp;&nbsp;{{ question.paper.title }}</h4><br>
+            <form action="{% url 'examination:modify_essay_question' question.pk %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="{{ form.title.id_for_label }}">题目：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                    {{ form.title }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.point.id_for_label }}">分数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                    {{ form.point }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.right_answer.id_for_label }}">标准答案：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                    {{ form.right_answer }}
+                </div>
+                
+                <button type="submit" class="btn btn-primary">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-danger">删除</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </form>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

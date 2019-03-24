@@ -1,0 +1,22 @@
+{% extends 'student/do_paper_base.html' %}
+
+{% block head_title_block%}
+{{ paper.title }}
+{% endblock %}
+
+{% block body_block %}
+<div class="container">
+    <div class="row justify-content-center align-self-center mt-5">
+        <div class="col-centered my-auto">
+            <div class="jumbotron">
+                <h1 class="display-4">{{ paper.title }}</h1>
+                <hr class="my-4">
+                <p class="lead text-center">
+                    <a href="{% url 'student:do_paper_multiple_choice' paper.pk %}" class="btn btn-primary">选择题部分</a>
+                    <a href="{% url 'student:do_paper_essay' paper.pk %}" class="btn btn-primary">问答题部分</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

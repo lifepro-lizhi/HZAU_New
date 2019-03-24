@@ -1,0 +1,79 @@
+{% extends "teacher/base.html" %}
+
+{% block head_title_block %}
+试卷列表
+{% endblock %}
+
+{% block title_block %}
+<h3>试卷列表</h3>
+{% endblock %}
+
+{% block navbar_block %}
+ <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="{% url 'examination:create_paper' %}">创建试卷</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block content_block%}
+<div class="container">
+    <h3>已发布试卷</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">试卷标题</th>
+                <th scope="col">出题人</th>
+                <th scope="col">发布日期</th>
+                <th scope="col">截止日期</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for paper in papers_published %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ paper.title }}</td>
+                    <td>{{ paper.paper_maker.name }}</td>
+                    <td>{{ paper.publish_date|date }}</td>
+                    <td>{{ paper.expire_date|date }}</td>
+                    <td><a href="{% url 'examination:paper_info' paper.pk %}">详情</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>未发布试卷</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">试卷标题</th>
+                <th scope="col">出题人</th>
+                <th scope="col">创建日期</th>
+                <th scope="col">截止日期</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for paper in papers_unpublished %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ paper.title }}</td>
+                    <td>{{ paper.paper_maker.name }}</td>
+                    <td>{{ paper.publish_date|date }}</td>
+                    <td>{{ paper.expire_date|date }}</td>
+                    <td>
+                        {% if paper.paper_maker == user.teacher %}
+                            <a href="{% url 'examination:paper_info' paper.pk %}">管理</a>
+                        {% else %}
+                            <a href="" class="text-red">管理（无权限）</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

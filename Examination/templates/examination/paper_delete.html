@@ -1,0 +1,31 @@
+{% extends "teacher/base.html" %}
+
+{% block head_title_block %}
+删除试卷
+{% endblock %}
+
+{% block title_block %}
+<h3>删除试卷</h3>
+{% endblock %}
+
+{% block navbar_block %}
+ <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="{% url 'examination:paper_info' paper.pk %}">返回</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block content_block%}
+<div class="container">
+    <divc class="row">
+    <ul class="list-group col-md-6 col-md-offset-3">
+        <h3>确定删除试卷 “{{ paper.title }}”？</h3>
+        <form action="{% url 'examination:delete_paper' paper.pk %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="确定" class="btn btn-danger">
+            <a href="{% url 'examination:paper_info' paper.pk %}" class="btn btn-primary">返回</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

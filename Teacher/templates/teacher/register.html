@@ -1,0 +1,27 @@
+{% extends "basic/base.html" %}
+
+{% block plugin_block %}
+{% load static %}
+<link href="{% static 'basic/css/signin.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title_block%}
+注册
+{% endblock%}
+
+{% block body_block%}
+<div class="col" style="width: 18rem;">
+    <img src="{% static 'basic/image/logo.jpg' %}" class="img-thumbnail rounded" width="100" alt="logo"><br><br>
+    <h3>教师注册页面</h3>
+    <form class="form-signin mx-auto" method="POST" action="{% url 'teacher:register' %}">
+        {% csrf_token %}
+        <input type="username" name="username" class="form-control" placeholder="登录名" required autofocus>
+        <input type="password" name="password" class="form-control" placeholder="密码" required>
+        <input type="password" name="confirm_password" class="form-control" placeholder="重复密码" required>
+        <input type="text" name="name" class="form-control" placeholder="教师姓名" required>
+        <button class="btn btn-primary btn-block" type="submit">注册</button>
+        <a class="btn btn-primary btn-block" href="{% url 'basic:index' %}" role="button">返回</a>
+    </form>
+    <p class="mt-5 mb-3 text-muted">&copy; 华中农业大学 2019</p>
+</div>
+{% endblock%}

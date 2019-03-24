@@ -1,0 +1,138 @@
+ <!DOCTYPE html>
+ {% load static %}
+ <html>
+     <head>
+         <meta charset="utf-8">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ 
+         <title>
+             {% block head_title_block %}
+             {% endblock %}
+         </title>
+ 
+          <!-- Bootstrap CSS CDN -->
+         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+         <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"> -->
+         <!-- Our Custom CSS -->
+         <link rel="stylesheet" href="{% static 'basic/css/sidebar.css' %}">
+     </head>
+ 
+     <body>
+     <div class="wrapper">
+         <!-- Sidebar Holder -->
+         <nav id="sidebar">
+             <div class="sidebar-header">
+                 <h4>华中农业大学植物科学技术学院</h4>
+                 <h4>后台管理系统</h4>
+             </div>
+ 
+             <ul class="list-unstyled components">
+                 <p>您好，{{ user.teacher.name }} 老师！</p>
+                 <li class="">
+                     <a href="#ExaminationSubmenu" data-toggle="collapse" aria-expanded="false">题库</a>
+                     <ul class="collapse list-unstyled" id="ExaminationSubmenu">
+                         <li><a href="{% url 'examination:create_paper' %}">创建试卷</a></li>
+                         <li><a href="{% url 'examination:paper_list' %}">浏览试卷</a></li>
+                     </ul>
+                 </li>
+                 <li>
+                     <a href="#VideoSubmenu" data-toggle="collapse" aria-expanded="false">视频</a>
+                     <ul class="collapse list-unstyled" id="VideoSubmenu">
+                         <li><a href="{% url 'video:upload_video' %}">上传视频</a></li>
+                         <li><a href="{% url 'video:video_list' %}">浏览视频</a></li>
+                     </ul>
+                 </li>
+                 <li>
+                     <a href="#ScoreSubmenu" data-toggle="collapse" aria-expanded="false">成绩</a>
+                     <ul class="collapse list-unstyled" id="ScoreSubmenu">
+                         <li><a href="{% url 'teacher:paper_results_list' %}">查看成绩</a></li>
+                     </ul>
+                 </li>
+                 <li>
+                     <a href="#PersonSubmenu" data-toggle="collapse" aria-expanded="false">个人</a>
+                     <ul class="collapse list-unstyled" id="PersonSubmenu">
+                         <li><a href="{% url 'teacher:papers' %}">已上传试卷</a></li>
+                         <li><a href="{% url 'teacher:uploaded_videos' %}">已上传视频</a></li>
+                         <li><a href="{% url 'teacher:index' %}">个人资料</a></li>
+                     </ul>
+                 </li>
+             </ul>
+ 
+             <ul class="list-unstyled CTAs">
+                 <li><a href="{% url 'teacher:logout' %}" class="article">退出</a></li>
+             </ul>
+             <p class="mt-5 mb-3 text-center text-white">&copy; 华中农业大学 2019</p>
+         </nav>
+ 
+         <!-- Page Content Holder -->
+         <div id="content">
+             <nav class="navbar navbar-default">
+                 <div class="container-fluid">
+                     <div class="navbar-header">
+                     {% block title_block %}
+                     {% endblock %}
+                         
+                     </div>
+                     {% block navbar_block %}
+                     {% endblock %}
+                 </div>
+             </nav>
+ 
+             {% block content_block%}
+             {% endblock %}
+ 
+         </div>
+     </div>
+
+     <div id="MessageModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="false">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content text-center text-white" style="background-color:#4286f4">
+                    {% for message in messages %}
+                    <br>
+                    {{ message|safe }}
+                    <br>
+                    <br>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    
+        {% if messages %}
+            {% for message in messages  %}
+                <input type="hidden" id="message" value="{{ message }}">
+            {% endfor %}
+        {% endif %}
+    
+       
+ 
+ 
+         <!-- jQuery CDN -->
+          <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+          <!-- Bootstrap Js CDN -->
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ 
+          <script type="text/javascript">
+              $(document).ready(function () {
+                  $('#sidebarCollapse').on('click', function () {
+                      $('#sidebar').toggleClass('active');
+                      $(this).toggleClass('active');
+                  });
+              });
+          </script>
+
+            {# message model #}
+            <script type="text/javascript">
+            $(window).on('load',function(){
+                var message = document.getElementById("message");
+                if (message != null)
+                {
+                    $('#MessageModal').modal('show');
+                }
+            });
+            </script>
+     </body>
+ </html>
+ 
+ 
+ 

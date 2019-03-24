@@ -1,0 +1,48 @@
+{% extends "student/base.html" %}
+
+{% block head_title_block %}
+试卷列表
+{% endblock %}
+
+{% block title_block %}
+<h3>试卷列表</h3>
+{% endblock %}
+
+{% block navbar_block %}
+ <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="">已发布试卷</a></li>
+        <li><a href="">未发布试卷</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block content_block%}
+<div class="container">
+    <h3>已发布试卷</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">试卷标题</th>
+                <th scope="col">出题人</th>
+                <th scope="col">发布日期</th>
+                <th scope="col">截止提交日期</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for paper in papers %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ paper.title }}</td>
+                <td>{{ paper.paper_maker.name }}</td>
+                <td>{{ paper.publish_date|date }}</td>
+                <td>{{ paper.expire_date|date }}</td>
+                <td><a href="{% url 'student:paper_info' paper.pk %}">详情</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

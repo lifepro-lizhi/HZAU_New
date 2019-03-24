@@ -1,0 +1,63 @@
+{% extends "basic/base.html" %}
+
+{% block plugin_block %}
+{% load static %}
+<link href="{% static 'basic/css/signin.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title_block%}
+登录
+{% endblock %}
+
+{% block body_block %}
+
+      
+
+
+<div class="col">
+    <img src="{% static 'basic/image/logo.jpg' %}" class="img-thumbnail rounded" width="100" alt="logo"><br><br>
+    <h3>华中农业大学植物科学技术学院</h3>
+    <h3>试题管理系统</h3><br>
+    <div class="card text-center mx-auto" style="width: 25rem;">
+        <div class="card-header">
+            <ul class="nav nav-pills mb-2 ml-5" id="pills-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active ml-4" id="pills-home-tab" data-toggle="pill" href="#student-login" role="tab" aria-controls="student-login" aria-selected="true">学生登录</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#teacher-login" role="tab" aria-controls="teacher-login" aria-selected="false">教师登录</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content" id="pills-tabContent">
+                <!--学生页面-->
+                <div class="tab-pane fade show active" id="student-login" role="tabpanel" aria-labelledby="student-login-tab">
+                    <form method="POST" class="form-signin" action="{% url 'student:login' %}">
+                        {% csrf_token %}
+                        <input type="username" name="username" class="form-control" placeholder="登录名" required autofocus>
+                        <input type="password" name="password" class="form-control" placeholder="密码" required>
+                        <input class="btn btn-primary btn-block" type="submit" value="登录">
+                        <a class="btn btn-primary btn-block" href="{% url 'student:register' %}" role="button">注册</a>
+                        <p class="mt-5 mb-3 text-muted">&copy; 华中农业大学 2019<br>技术支持：武汉硕视科技有限公司</p>
+                    </form> 
+                </div>
+
+                <!--教师页面-->
+                <div class="tab-pane fade" id="teacher-login" role="tabpanel" aria-labelledby="teacher-login-tab">
+                    <form method="POST" class="form-signin" action="{% url 'teacher:login' %}">
+                        {% csrf_token %}
+                        <input type="username" name="username" class="form-control" placeholder="登录名" required autofocus>
+                        <input type="password" name="password" class="form-control" placeholder="密码" required>
+                        <input class="btn btn-primary btn-block" type="submit" value="登录">
+                        <a class="btn btn-primary btn-block" href="{% url 'teacher:register' %}" role="button">注册</a>
+                        <p class="mt-5 mb-3 text-muted">&copy; 华中农业大学 2019<br>技术支持：武汉硕视科技有限公司</p>
+                    </form>  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock%}

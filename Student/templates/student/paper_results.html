@@ -1,0 +1,39 @@
+{% extends "student/base.html" %}
+
+{% block head_title_block %}
+考试成绩
+{% endblock %}
+
+{% block title_block %}
+<h3>考试成绩</h3>
+{% endblock %}
+
+{% block content_block%}
+<div class="container">
+    <h3>考试成绩</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">试卷标题</th>
+                <th scope="col">总分</th>
+                <th scope="col">选择题</th>
+                <th scope="col">问答题</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ result.paper.title }}</td>
+                <td>{{ result.essay_question_result|add:result.choice_question_result }}</td>
+                <td>{{ result.choice_question_result }}</td>
+                <td>{{ result.essay_question_result }}</td>
+                <td><a href="">详情</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

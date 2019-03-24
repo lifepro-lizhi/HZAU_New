@@ -1,0 +1,49 @@
+{% extends "teacher/base.html" %}
+
+{% block head_title_block %}
+成绩统计
+{% endblock %}
+
+{% block title_block %}
+<h3>成绩统计</h3>
+{% endblock %}
+
+{% block navbar_block %}
+ <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="{}">导出成绩</a></li>
+        <li><a href="{% url 'examination:paper_info' paper.pk %}">返回</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block content_block%}
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">学号</th>
+                <th scope="col">学生姓名</th>
+                <th scope="col">总分</th>
+                <th scope="col">选择题</th>
+                <th scope="col">问答题</th>
+                <th scope="col">提交时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ result.student.student_id }}</td>
+                    <td>{{ result.student.name }}</td>
+                    <td>{{ result.essay_question_result|add:result.choice_question_result }}</td>
+                    <td>{{ result.choice_question_result }}</td>
+                    <td>{{ result.essay_question_result }}</td>
+                    <td>{{ result.submit_date|date }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

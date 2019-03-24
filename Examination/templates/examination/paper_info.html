@@ -1,0 +1,56 @@
+{% extends "teacher/base.html" %}
+
+{% block head_title_block %}
+试卷详情
+{% endblock %}
+
+{% block title_block %}
+<h3>试卷详情</h3>
+{% endblock %}
+
+{% block navbar_block %}
+ <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav navbar-right">
+        {% if paper.is_published %}
+        <li><a href="{% url 'examination:paper_preview' paper.pk %}">试卷预览</a></li>
+        <li><a href="{% url 'examination:paper_results' paper.pk%}">成绩统计</a></li>
+        <li><a href="{% url 'examination:paper_list' %}">返回列表</a></li>
+        {% else %}
+        <li><a href="{% url 'examination:create_multiple_choice_question' paper.pk %}">添加选择题</a></li>
+        <li><a href="{% url 'examination:create_essay_question' paper.pk%}">添加问答题</a></li>
+        <li><a href="{% url 'examination:paper_preview' paper.pk %}">试卷预览</a></li>
+        <li><a href="{% url 'examination:paper_list' %}">返回列表</a></li>
+        <li><a href="{% url 'examination:publish_paper' paper.pk %}">发布试卷</a></li>
+        <li><a href="{% url 'examination:delete_paper' paper.pk %}">删除试卷</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endblock %}
+
+{% block content_block%}
+<div class="container">
+    <divc class="row">
+    <ul class="list-group col-md-6 col-md-offset-3">
+        <li class="list-group-item">标题：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ paper.title }}</li>
+        <li class="list-group-item">描述：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ paper.description}}</li>
+        <li class="list-group-item">出题人：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ paper.paper_maker.name }}</li>
+        <li class="list-group-item">试卷总分：&nbsp;&nbsp;&nbsp;{{ paper.multiple_choice_question_total_score|add:paper.essay_question_total_score}}</li>
+        <li class="list-group-item">选择题：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ paper.multiple_choice_question_count }} 道， 共 {{ paper.multiple_choice_question_total_score }} 分</li>
+        <li class="list-group-item">问答题：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ paper.essay_question_count }} 道， 共 {{ paper.essay_question_total_score }} 分</li>
+        {% if paper.is_published %}
+        <li class="list-group-item">发布状态：&nbsp;&nbsp;已发布</li>
+        <li class="list-group-item">发布时间：&nbsp;&nbsp;&nbsp;{{ paper.publish_date|date }}</li>
+        <li class="list-group-item">截止时间：&nbsp;&nbsp;&nbsp;{{ paper.expire_date|date }}</li>
+        {% else %}
+        <li class="list-group-item">发布状态：&nbsp;&nbsp;未发布</li>
+        <li class="list-group-item">创建时间：&nbsp;&nbsp;{{ paper.publish_date|date }}</li>
+        <li class="list-group-item">截止时间：&nbsp;&nbsp;{{ paper.expire_date|date }}</li>
+        {% endif %}
+        <li class="list-group-item"><a class="btn btn-primary" href="{% url 'examination:modify_paper' paper.pk %}">修改试卷信息</a></li>
+        <br>
+        
+    </ul>
+
+    </div>
+</div>
+{% endblock %}

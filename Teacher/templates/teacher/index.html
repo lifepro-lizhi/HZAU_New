@@ -1,0 +1,18 @@
+ {% extends "teacher/base.html" %}
+
+{% block head_title_block %}
+教师首页
+{% endblock %}
+
+{% block title_block %}
+<h3>首页</h3>
+{% endblock %}
+
+ {% block content_block %}
+
+ {% load static %}
+
+ <h3>欢迎回来，{{ user.teacher.name }} 老师！</h3><br><br><br><br>
+ <img src="{% static 'teacher/image/index_view.jpg' %}" width="1000" alt="华农校园风景">
+
+ {% endblock %}

@@ -1,0 +1,44 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Paper List</title>
+</head>
+
+<body>
+    <h2>{{ paper.title }} 
+        {% if not paper.is_published %}
+        (<a href="{% url 'examination:publish_paper' paper.pk %}">发布试卷</a>)
+        {% endif %}
+    </h2>
+    <h4>{{ paper.description }}</h4>
+    <p>选择题：{{ paper.multiple_choice_question_count }} 道， 选择题总分：{{ paper.multiple_choice_question_total_score }}</p>
+    <p>问答题：{{ paper.essay_question_count }} 道， 选择题总分：{{ paper.essay_question_total_score }}</p>
+    <p>试卷总分： {{ paper.multiple_choice_question_total_score|add:paper.essay_question_total_score }}</p>
+
+    <!-- for teacher -->
+    {% for question in paper.multiple_choice_question_set.all %}
+        <p>
+            {{ forloop.counter }}. {{ question.title }}
+            (<a href="{% url 'examination:modify_multiple_choice_question' question.id %}">修改</a>)
+        </p>
+        <p>A. {{ question.option_A }}</p>
+        <p>B. {{ question.option_B }}</p>
+        <p>C. {{ question.option_C }}</p>
+        <p>D. {{ question.option_D }}</p>
+        <p>正确答案：{{ question.right_answer }}</p>
+        <p>分数：{{ question.point }}</p>
+        <br>
+    {% endfor %}
+
+    {% for question in paper.essay_question_set.all %}
+        <p>{{ question.title }}</p>
+    {% endfor %}
+    <!-- end for teacher -->
+
+
+</body>
+</html>
+
+

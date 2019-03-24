@@ -1,0 +1,53 @@
+{% extends "teacher/base.html" %}
+
+{% block head_title_block %}
+已上传试卷
+{% endblock %}
+
+{% block title_block %}
+<h3>已上传试卷</h3>
+{% endblock %}
+
+ {% block content_block %}
+
+ {% load static %}
+
+ <div class="container">
+ <table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">试卷标题</th>
+            <th scope="col">出题人</th>
+            <th scope="col">发布状态</th>
+            <th scope="col">创建/发布日期</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for paper in papers %}
+        <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ paper.title }}</td>
+            <td>{{ paper.paper_maker.name }}</td>
+
+            {% if paper.is_published %}
+            <td>已发布</td>
+            {% else %}
+            <td>未发布</td>
+            {% endif %}
+
+            <td>{{ paper.publish_date|date }}</td>
+
+            {% if paper.is_published %}
+            <td><a href="{% url 'examination:paper_info' paper.pk %}">详情</a></td>
+            {% else %}
+            <td><a href="{% url 'examination:paper_info' paper.pk %}">管理</a></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+ {% endblock %}
