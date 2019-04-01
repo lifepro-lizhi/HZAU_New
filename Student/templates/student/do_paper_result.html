@@ -10,49 +10,65 @@
 
 <div class="container">
 
-<h2 class="text-center">{{ paper.title }}（选择题部分）</h2>
-<h5 class="text-primary">选择题总分：{{ paper.multiple_choice_question_total_score }}</h5>
-<h5 class="text-primary">您的得分：{{ paper_result.choice_question_result }}</h5>
-<br>
 
-<form action="{% url 'student:do_paper_multiple_choice' paper.pk %}" method="POST">
+<form action="" method="">
     {% csrf_token %}
-    {% for question in paper.multiple_choice_question_set.all %}
-    <fieldset class="form-group" id="{{ question.pk }}">
-        <div class="row">
-            <div class="col-sm-10">
-                <p>{{ forloop.counter }}.{{ question.title }}</p>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="question.{{ question.pk }}" id="option_A" value="A">
-                    <label class="form-check-label" for="option_A">A.{{ question.option_A }}</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="question.{{ question.pk }}" id="option_B" value="B">
-                    <label class="form-check-label" for="option_B">B.{{ question.option_B }}</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="question.{{ question.pk }}" id="option_C" value="C">
-                    <label class="form-check-label" for="option_C">C.{{ question.option_C }}</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="question.{{ question.pk }}" id="option_C" value="C">
-                    <label class="form-check-label" for="option_C">D.{{ question.option_C }}</label>
-                </div>
-                <br>
-                <p class="font-weight-bold text-success">正确答案：{{ question.right_answer }}</p>
-                {% if answers is not None%}
-                    {% get_right_or_wrong question.pk answers as right %}
-                    {% if right %}
-                    <p class="font-weight-bold text-success">您的选择：{% get_student_answer question.pk answers %}（正确）</p>
-                    {% else %}
-                    <p class="font-weight-bold text-danger">您的选择：{% get_student_answer question.pk answers %}（错误）</p>
+    {% if is_essay_result == False %}
+        <h2 class="text-center">{{ paper.title }}（选择题部分）</h2>
+        <h5 class="text-primary">选择题总分：{{ paper.multiple_choice_question_total_score }}</h5>
+        <h5 class="text-primary">您的得分：{{ paper_result.choice_question_result }}</h5>
+        <br>
+        {% for question in paper.multiple_choice_question_set.all %}
+        <fieldset class="form-group" id="{{ question.pk }}">
+            <div class="row">
+                <div class="col-sm-10">
+                    <p>{{ forloop.counter }}.{{ question.title }}</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="question.{{ question.pk }}" id="option_A" value="A">
+                        <label class="form-check-label" for="option_A">A.{{ question.option_A }}</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="question.{{ question.pk }}" id="option_B" value="B">
+                        <label class="form-check-label" for="option_B">B.{{ question.option_B }}</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="question.{{ question.pk }}" id="option_C" value="C">
+                        <label class="form-check-label" for="option_C">C.{{ question.option_C }}</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="question.{{ question.pk }}" id="option_C" value="C">
+                        <label class="form-check-label" for="option_C">D.{{ question.option_C }}</label>
+                    </div>
+                    <br>
+                    <p class="font-weight-bold text-success">正确答案：{{ question.right_answer }}</p>
+                    {% if answers is not None%}
+                        {% get_right_or_wrong question.pk answers as right %}
+                        {% if right %}
+                        <p class="font-weight-bold text-success">您的选择：{% get_student_answer question.pk answers %}（正确）</p>
+                        {% else %}
+                        <p class="font-weight-bold text-danger">您的选择：{% get_student_answer question.pk answers %}（错误）</p>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
+                </div>
             </div>
-        </div>
-    </fieldset>
-    <br>
-    {% endfor %}
+        </fieldset>
+        <br>
+        {% endfor %}
+    {% else %}
+        <h2 class="text-center">{{ paper.title }}（问答题部分）</h2>
+        {% for question, answer in questions_and_answers %}
+            <fieldset class="form-group" id="{{ question.pk }}">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <p>{{ forloop.counter }}.{{ question.title }}</p>
+                        <div class="form-check">
+                            <textarea name="" id="" cols="80" rows="10" name="question.{{ question.pk }}">{{ answer }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        {% endfor %}
+    {% endif %}
 </form>
 
 </div>

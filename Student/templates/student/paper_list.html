@@ -11,8 +11,6 @@
 {% block navbar_block %}
  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav navbar-right">
-        <li><a href="">已发布试卷</a></li>
-        <li><a href="">未发布试卷</a></li>
     </ul>
 </div>
 {% endblock %}
@@ -39,7 +37,11 @@
                 <td>{{ paper.paper_maker.name }}</td>
                 <td>{{ paper.publish_date|date }}</td>
                 <td>{{ paper.expire_date|date }}</td>
+                {% if showEssayComment == 0 %}
                 <td><a href="{% url 'student:paper_info' paper.pk %}">详情</a></td>
+                {% else %}
+                <td><a href="{% url 'student:essay_comment_pick' paper.pk %}">问答题互评</a></td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

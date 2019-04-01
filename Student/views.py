@@ -5,11 +5,12 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from Student.forms import UserLoginForm, UserRegisterForm, StudentInfoForm
-from Examination.models import Paper, Multiple_Choice_Question
-from Student.models import Student, PaperResult
+from Examination.models import Paper, Multiple_Choice_Question, Essay_Question
+from Student.models import Student, PaperResult, EssayAnswer, PaperAnswer
 from GradeClass.models import GradeClass
 from Video.models import Video
 from datetime import date
+import random
 
 # Create your views here.
 
@@ -100,9 +101,10 @@ def student_logout(request):
     return HttpResponseRedirect(reverse('basic:index'))
 
 
-def paper_list(request):
+def paper_list(request, showEssayComment):
     papers = Paper.objects.filter(is_published__exact=True)
-    context = {'papers' : papers}
+    context = {'papers' : papers,
+               'showEssayComment' : showEssayComment}
     return render(request, 'student/paper_list.html', context=context)
 
 
@@ -157,7 +159,8 @@ def do_paper_multiple_choice(request, paper_id):
 
         context = {'paper': paper, 
                    'answers': answers, 
-                   'paper_result': paper_result, }
+                   'paper_result': paper_result, 
+                   'is_essay_result': False}
         return render(request, 'student/do_paper_result.html', context)
     else:
         paper = Paper.objects.get(pk=paper_id)
@@ -175,8 +178,47 @@ def do_paper_multiple_choice(request, paper_id):
 
 def do_paper_essay(request, paper_id):
     paper = Paper.objects.get(pk=paper_id)
-    context = {'paper': paper}
-    return render(request, 'student/do_paper_essay.html', context)
+    student = Student.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        paper_answer = PaperAnswer()
+        paper_answer.paper = paper
+        paper_answer.student = student
+        paper_answer.save()
+
+        answers = []
+
+        for key in request.POST.keys():
+            print('111')
+            print(key)
+            if 'question' in key:
+                print('222')
+                question_id = int(key[key.find('.') + 1 :])
+                question = Essay_Question.objects.get(pk=question_id)
+                print('333')
+
+                answer_text = request.POST[key]
+                answers.append(answer_text)
+
+                answer = EssayAnswer()
+                answer.essay_question = question
+                answer.paper_answer = paper_answer
+                answer.student_answer = answer_text
+                answer.save()
+                print('444')
+        
+        essay_questions = paper.essay_question_set.all()
+        print(len(essay_questions))
+        print(len(answers))
+        questions_and_answers = zip(essay_questions, answers)
+        context = {'paper': paper, 
+                   'questions_and_answers': questions_and_answers,
+                   'is_essay_result': True}
+        return render(request, 'student/do_paper_result.html', context)
+    else:
+        paper = Paper.objects.get(pk=paper_id)
+        context = {'paper': paper}
+        return render(request, 'student/do_paper_essay.html', context)
 
 
 def paper_results(request):
@@ -192,5 +234,40 @@ def video_list(request):
     context = {'videos': videos}
 
     return render(request, 'student/video_list.html', context=context)
+
+
+def essay_comment_pick(request, paper_id):
+    paper = Paper.objects.get(pk=paper_id)
+    context = {'paper': paper}
+
+    return render(request, 'student/essay_comment_pick.html', context=context)
+
+
+def pick_random_paper(request, paper_id):
+    paper = Paper.objects.get(pk=paper_id)
+    paper_commits_count = len(paper.paperanswer_set.all()) / paper.essay_question_count
+    paper_answers_to_add_comment = []
+    already_picked_index = []
+
+    if paper_commits_count > 5:
+        while len(comments_for_paperanswer) < 5:    # one student should do at least 5 comments
+            r = random.randint(0, paper_commits_count)    # random pick a index
+            if r not in already_picked_index:    # insure the current index has not been selected 
+                paper_answer = paper.paperanswer_set.order_by('id')[r]    # get the paper_answer at the specified index
+                if paper_answer.comments_count < 5:    # insure the paper_answer's comments' count is less than 5
+                    paper_answers_to_add_comment.append(paper_answer)
+                else:
+                    continue
+            else:
+                continue
+    
+    context = {'paper': paper,
+               'paper_answers': paper_answers_to_add_comment}
+    return render(request, 'student/do_comment_paper_list.html', context=context)
+
+
+
+
+
 
 

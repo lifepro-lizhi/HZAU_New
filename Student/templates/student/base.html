@@ -32,8 +32,8 @@
                 <li class="">
                     <a href="#ExaminationSubmenu" data-toggle="collapse" aria-expanded="false">题库</a>
                     <ul class="collapse list-unstyled" id="ExaminationSubmenu">
-                        <li><a href="{% url 'student:paper_list' %}">浏览试卷</a></li>
-                        <li><a href="{% url 'student:paper_list' %}">问答题互评</a></li>
+                        <li><a href="{% url 'student:paper_list' showEssayComment=0 %}">浏览试卷</a></li>
+                        <li><a href="{% url 'student:paper_list' showEssayComment=1 %}">问答题互评</a></li>
                     </ul>
                 </li>
                 <li>

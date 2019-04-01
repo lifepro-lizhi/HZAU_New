@@ -18,7 +18,7 @@
             <div class="col-sm-10">
                 <p>{{ forloop.counter }}.{{ question.title }} ({{ question.point }}分)</p>
                 <div class="form-check">
-                    <textarea name="" id="" cols="80" rows="10"></textarea>
+                    <textarea cols="80" rows="10" name="question.{{ question.pk }}"></textarea>
                 </div>
             </div>
         </div>

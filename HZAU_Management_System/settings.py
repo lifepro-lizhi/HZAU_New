@@ -81,8 +81,14 @@ WSGI_APPLICATION = 'HZAU_Management_System.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'hzau_project',
+        'USER': 'admin',
+        'PASSWORD': '1987426Lizhi',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 

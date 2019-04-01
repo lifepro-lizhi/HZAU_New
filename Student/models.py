@@ -29,9 +29,15 @@ class PaperResult(models.Model):
         return "{} ( {} )".format(self.paper.title, self.student.name)
 
 
-class EssayAnswer(models.Model):
-    essay_question = models.ForeignKey(Essay_Question, on_delete=models.SET_NULL, null=True)
+class PaperAnswer(models.Model):
+    paper = models.ForeignKey(Paper, on_delete=models.SET_NULL, null=True)
     student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
+    comments_count = models.IntegerField(default=0)
+
+
+class EssayAnswer(models.Model):
+    paper_answer = models.ForeignKey(PaperAnswer, on_delete=models.SET_NULL, null=True)
+    essay_question = models.ForeignKey(Essay_Question, on_delete=models.SET_NULL, null=True)
     student_answer = models.TextField()
 
     def __str__(self):
@@ -40,5 +46,6 @@ class EssayAnswer(models.Model):
 
 class EssayComment(models.Model):
     essay_answer = models.ForeignKey(EssayAnswer, on_delete=models.SET_NULL, null=True)
+    student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
     comment = models.TextField()
     score = models.IntegerField()

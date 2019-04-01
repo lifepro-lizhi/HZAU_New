@@ -12,6 +12,16 @@
             {% endblock %}
         </title>
 
+        <!-- Styles -->	
+        <style>
+            body 
+            {
+                background-image: url("{% static 'basic/image/background.jpg' %}");
+                background-repeat:no-repeat;
+                background-size:cover;
+            }
+        </style>
+
         {% block plugin_block%}
         {% endblock %}
 
