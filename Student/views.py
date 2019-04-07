@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from Student.forms import UserLoginForm, UserRegisterForm, StudentInfoForm
 from Examination.models import Paper, Multiple_Choice_Question, Essay_Question
-from Student.models import Student, PaperResult, EssayAnswer, PaperAnswer
+from Student.models import Student, PaperResult, EssayAnswer, PaperAnswer, EssayComment
 from GradeClass.models import GradeClass
 from Video.models import Video
 from datetime import date
@@ -128,7 +128,17 @@ def paper_info(request, paper_id):
 
 def do_paper_type_choose(request, paper_id):
     paper = Paper.objects.get(pk=paper_id)
-    context = {'paper': paper}
+    student = Student.objects.get(user=request.user)
+    paper_result = PaperResult.objects.all().filter(paper=paper, student=student)
+    if len(paper_result) != 0:
+        does_choice_question_submit = paper_result[0].does_choice_question_submit
+        does_essay_question_submit = paper_result[0].does_essay_question_submit
+    else:
+        does_choice_question_submit = False
+        does_essay_question_submit = False
+    context = {'paper': paper,
+               'does_choice_question_submit': does_choice_question_submit,
+               'does_essay_question_submit': does_essay_question_submit}
     return render(request, 'student/do_paper_type_choose.html', context)
 
 
@@ -147,12 +157,13 @@ def do_paper_multiple_choice(request, paper_id):
                 answers[str(question_id)] = answer
 
         paper = Paper.objects.get(pk=paper_id)
-        # student = Student.objects.all().filter(user=request.user)
         student = Student.objects.get(user=request.user)
-        if student is not None:
-            print("name: {}".format(student.name))
-            print("id: {}".format(student.student_id))
-        paper_result = PaperResult(paper=paper, student=student, submit_date=date.today())
+
+        # if no corresponding paper_result exists, then create new one
+        paper_result = PaperResult.objects.filter(paper=paper, student=student).first()
+        if paper_result == None:
+            paper_result = PaperResult(paper=paper, student=student, submit_date=date.today())
+
         paper_result.choice_question_result = score
         paper_result.does_choice_question_submit = True
         paper_result.save()
@@ -165,14 +176,18 @@ def do_paper_multiple_choice(request, paper_id):
     else:
         paper = Paper.objects.get(pk=paper_id)
         student = Student.objects.get(user=request.user)
-        paper_result = PaperResult.objects.all().filter(paper=paper, student=student)
-        if len(paper_result) == 0:
+        paper_result = PaperResult.objects.all().filter(paper=paper, student=student).first()
+
+        # if corresponding paper_result exists, or does_choice_question_submit is False, then show the paper to let student do
+        if paper_result == None or paper_result.does_choice_question_submit == False:
             context = {'paper': paper}
             return render(request, 'student/do_paper_multiple_choice.html', context)
+        # else show the answered paper
         else:
             context = {'paper': paper, 
                        'answers': None,
-                       'paper_result': paper_result[0]}
+                       'paper_result': paper_result,
+                       'is_essay_result': False}
             return render(request, 'student/do_paper_result.html', context)
 
 
@@ -189,13 +204,9 @@ def do_paper_essay(request, paper_id):
         answers = []
 
         for key in request.POST.keys():
-            print('111')
-            print(key)
             if 'question' in key:
-                print('222')
                 question_id = int(key[key.find('.') + 1 :])
                 question = Essay_Question.objects.get(pk=question_id)
-                print('333')
 
                 answer_text = request.POST[key]
                 answers.append(answer_text)
@@ -205,20 +216,42 @@ def do_paper_essay(request, paper_id):
                 answer.paper_answer = paper_answer
                 answer.student_answer = answer_text
                 answer.save()
-                print('444')
+        
+        paper_result = PaperResult.objects.filter(paper=paper, student=student).first()
+        if paper_result == None:
+            paper_result = PaperResult(paper=paper, student=student, submit_date=date.today())
+
+        paper_result.does_essay_question_submit = True
+        paper_result.save()
+
+        paper_answer = PaperAnswer.objects.filter(paper=paper, student=student).first()
+        essay_answers = paper_answer.essayanswer_set.all()
         
         essay_questions = paper.essay_question_set.all()
-        print(len(essay_questions))
-        print(len(answers))
         questions_and_answers = zip(essay_questions, answers)
         context = {'paper': paper, 
-                   'questions_and_answers': questions_and_answers,
+                   'essay_answers': essay_answers,
                    'is_essay_result': True}
         return render(request, 'student/do_paper_result.html', context)
     else:
         paper = Paper.objects.get(pk=paper_id)
-        context = {'paper': paper}
-        return render(request, 'student/do_paper_essay.html', context)
+        student = Student.objects.get(user=request.user)
+        paper_result = PaperResult.objects.all().filter(paper=paper, student=student).first()
+
+        # if corresponding paper_result exists, or does_essay_question_submit is False, then show the paper to let student do
+        if paper_result == None or paper_result.does_essay_question_submit == False:
+            context = {'paper': paper}
+            return render(request, 'student/do_paper_essay.html', context)
+        # else show the answered paper
+        else:
+            paper_answer = PaperAnswer.objects.filter(paper=paper, student=student).first()
+            essay_answers = paper_answer.essayanswer_set.all()
+
+            context = {'paper': paper, 
+                       'essay_answers': essay_answers,
+                       'paper_result': paper_result,
+                       'is_essay_result': True}
+            return render(request, 'student/do_paper_result.html', context)
 
 
 def paper_results(request):
@@ -245,25 +278,81 @@ def essay_comment_pick(request, paper_id):
 
 def pick_random_paper(request, paper_id):
     paper = Paper.objects.get(pk=paper_id)
-    paper_commits_count = len(paper.paperanswer_set.all()) / paper.essay_question_count
+    paper_commits_count = len(paper.paperanswer_set.all())
     paper_answers_to_add_comment = []
+    paper_answer_ids = []
     already_picked_index = []
 
-    if paper_commits_count > 5:
-        while len(comments_for_paperanswer) < 5:    # one student should do at least 5 comments
-            r = random.randint(0, paper_commits_count)    # random pick a index
+    if paper_commits_count >= 5:
+        while len(paper_answers_to_add_comment) < 5:    # one student should do at least 5 comments
+            r = random.randint(0, paper_commits_count - 1)    # random pick a index
             if r not in already_picked_index:    # insure the current index has not been selected 
                 paper_answer = paper.paperanswer_set.order_by('id')[r]    # get the paper_answer at the specified index
-                if paper_answer.comments_count < 5:    # insure the paper_answer's comments' count is less than 5
-                    paper_answers_to_add_comment.append(paper_answer)
+
+                current_student = Student.objects.get(user=request.user)
+                if current_student != paper_answer.student:    # can not comment himself's paper
+                    if paper_answer.comments_count < 5:    # insure the paper_answer's comments' count is less than 5
+                        paper_answers_to_add_comment.append(paper_answer)
+                        paper_answer_ids.append(paper_answer.pk)
+                    else:
+                        continue
                 else:
                     continue
             else:
                 continue
+
+        request.session['paper_answer_ids'] = paper_answer_ids
+
+        context = {'paper': paper,
+                'paper_answers': paper_answers_to_add_comment}
+        return render(request, 'student/do_comment_paper_list.html', context=context)
+    else:
+        messages.warning(request, '答题人数不足，无法分配试卷！') 
+        return HttpResponseRedirect(reverse('student:essay_comment_pick', args=[paper.pk]))
+
+
+def do_comment(request, paper_answer_id):
+    paper_answer = PaperAnswer.objects.get(pk=paper_answer_id)
+    student = Student.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        for key in request.POST.keys():
+            if 'essay_comment' in key:
+                essay_answer_id = int(key[key.find('.') + 1 :])
+                essay_answer = EssayAnswer.objects.get(pk=essay_answer_id)
+
+                essay_comment = EssayComment.objects.filter(essay_answer=essay_answer, student=student).first()
+                if essay_comment == None:
+                    essay_comment = EssayComment()
+                    essay_comment.essay_answer = essay_answer
+                    essay_comment.student = student
+                
+                if 'essay_comment_comment' in key:
+                    comment = request.POST[key]
+                    essay_comment.comment = comment
+                elif 'essay_comment_score' in key:
+                    score = request.POST[key]
+                    essay_comment.score = score
+                
+                # essay_comment.save()
+        
+        paper_answers_to_add_comment = []
+        paper_answer_ids = request.session['paper_answer_ids']
+        for paper_answer_id in paper_answer_ids:
+            paper_answer = PaperAnswer.objects.get(pk=paper_answer_id)
+            paper_answers_to_add_comment.append(paper_answer)
+        
+        paper = Paper.objects.get(pk=paper_answers_to_add_comment[0].paper.id)
+        context = {'paper': paper,
+                   'paper_answers': paper_answers_to_add_comment}
+
+        return render(request, 'student/do_comment_paper_list.html', context=context)
+    else:
+        essay_answers = paper_answer.essayanswer_set.all()
+        context = {'paper_answer': paper_answer,
+                'essay_answers': essay_answers}
+        return render(request, 'student/do_comment.html', context=context)
     
-    context = {'paper': paper,
-               'paper_answers': paper_answers_to_add_comment}
-    return render(request, 'student/do_comment_paper_list.html', context=context)
 
 
 

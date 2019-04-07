@@ -24,15 +24,15 @@
         <li class="list-group-item">描述：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ paper.description}}</li>
         <li class="list-group-item">出题人：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ paper.paper_maker.name }}</li>
         <li class="list-group-item">试卷总分：&nbsp;&nbsp;&nbsp;{{ paper.multiple_choice_question_total_score|add:paper.essay_question_total_score}}</li>
-        <li class="list-group-item">选择题：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ paper.multiple_choice_question_count }} 道， 共 {{ paper.multiple_choice_question_total_score }} 分</li>
-        <li class="list-group-item">问答题：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ paper.essay_question_count }} 道， 共 {{ paper.essay_question_total_score }} 分</li>
+        <li class="list-group-item">选择题：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ paper.multiple_choice_question_set.all|length }} 道， 共 {{ paper.multiple_choice_question_total_score }} 分</li>
+        <li class="list-group-item">问答题：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ paper.essay_question_set.all|length }} 道， 共 {{ paper.essay_question_total_score }} 分</li>
         <li class="list-group-item">发布状态：&nbsp;&nbsp;已发布</li>
         <li class="list-group-item">发布时间：&nbsp;&nbsp;&nbsp;{{ paper.publish_date|date }}</li>
 
         {% load get_student_answer %}
         <!-- {% if paper_result is None %} -->
-        <li class="list-group-item">答题状态：&nbsp;&nbsp;&nbsp;选择题：{% get_paper_result_choice_question_status paper_result.pk %}；
-            <br>问答题：{% get_paper_result_essay_question_status paper_result.pk %}</li>
+        <!-- <li class="list-group-item">答题状态：&nbsp;&nbsp;&nbsp;选择题：{% get_paper_result_choice_question_status paper_result.pk %}；
+            <br>问答题：{% get_paper_result_essay_question_status paper_result.pk %}</li> -->
         <!-- {% else %}
             <li class="list-group-item">答题状态：&nbsp;&nbsp;&nbsp;选择题：{% get_paper_result_choice_question_status paper_result.pk %}
                 <br>问答题：{% get_paper_result_essay_question_status paper_result.pk %}

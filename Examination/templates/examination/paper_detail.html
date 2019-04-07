@@ -13,8 +13,8 @@
         {% endif %}
     </h2>
     <h4>{{ paper.description }}</h4>
-    <p>选择题：{{ paper.multiple_choice_question_count }} 道， 选择题总分：{{ paper.multiple_choice_question_total_score }}</p>
-    <p>问答题：{{ paper.essay_question_count }} 道， 选择题总分：{{ paper.essay_question_total_score }}</p>
+    <p>选择题：{{ paper.multiple_choice_question_set.all|length }} 道， 选择题总分：{{ paper.multiple_choice_question_total_score }}</p>
+    <p>问答题：{{ paper.essay_question_set.all|length }} 道， 选择题总分：{{ paper.essay_question_total_score }}</p>
     <p>试卷总分： {{ paper.multiple_choice_question_total_score|add:paper.essay_question_total_score }}</p>
 
     <!-- for teacher -->

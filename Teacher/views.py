@@ -63,6 +63,12 @@ def teacher_login(request):
 
         user = authenticate(username=username, password=password)
         if user:
+            try:
+                teacher = Teacher.objects.get(user=user)
+            except Teacher.DoesNotExist:
+                messages.warning(request, '用户名或密码错误！')
+                return HttpResponseRedirect(reverse('basic:index'))
+
             if user.is_active:
                 login(request, user)
                 # messages.success(request, '登录成功！')
@@ -83,18 +89,21 @@ def teacher_logout(request):
     return HttpResponseRedirect(reverse('basic:index'))
 
 
+@login_required
 def teacher_papers(request):
     papers = Paper.objects.filter(paper_maker=request.user.teacher)
     context = {'papers': papers}
     return render(request, 'teacher/papers.html', context=context)
 
 
+@login_required
 def uploaded_videos(request):
     videos = Video.objects.filter(teacher=request.user.teacher)
     context = {'videos': videos}
     return render(request, 'teacher/uploaded_videos.html', context=context)
 
 
+@login_required
 def paper_results_list(request):
     teacher = Teacher.objects.filter(user=request.user)
     papers = Paper.objects.filter(paper_maker__in=teacher, is_published=True)

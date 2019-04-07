@@ -9,7 +9,7 @@ class DateInput(forms.DateInput):
 class PaperForm(forms.ModelForm):
     class Meta:
         model = Paper
-        fields = ['title', 'description', 'expire_date'] 
+        fields = ['title', 'description', 'expire_date', 'is_published'] 
         widgets = {'expire_date': forms.SelectDateWidget()}
 
 

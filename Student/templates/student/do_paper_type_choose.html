@@ -8,12 +8,22 @@
 <div class="container">
     <div class="row justify-content-center align-self-center mt-5">
         <div class="col-centered my-auto">
+            <a href="{% url 'student:paper_info' paper.pk %}" class="btn btn-primary">返回试卷详情</a><br><br>
             <div class="jumbotron">
                 <h1 class="display-4">{{ paper.title }}</h1>
                 <hr class="my-4">
                 <p class="lead text-center">
-                    <a href="{% url 'student:do_paper_multiple_choice' paper.pk %}" class="btn btn-primary">选择题部分</a>
-                    <a href="{% url 'student:do_paper_essay' paper.pk %}" class="btn btn-primary">问答题部分</a>
+                    {% if does_choice_question_submit %}
+                        <a href="{% url 'student:do_paper_multiple_choice' paper.pk %}" class="btn btn-secondary">选择题部分(已提交)</a>
+                    {% else %}
+                        <a href="{% url 'student:do_paper_multiple_choice' paper.pk %}" class="btn btn-primary">选择题部分</a>
+                    {% endif %}
+
+                    {% if does_essay_question_submit %}
+                        <a href="{% url 'student:do_paper_essay' paper.pk %}" class="btn btn-secondary">问答题部分(已提交)</a>
+                    {% else %}
+                        <a href="{% url 'student:do_paper_essay' paper.pk %}" class="btn btn-primary">问答题部分</a>
+                    {% endif %}
                 </p>
             </div>
         </div>

@@ -1,93 +1,81 @@
-{% extends "teacher/base.html" %}
+{% extends "basic/base.html" %}
 
-{% block head_title_block %}
+{% block title_block %}
 试卷预览
 {% endblock %}
 
-{% block title_block %}
-<h3>试卷预览</h3>
-{% endblock %}
 
-{% block navbar_block %}
- <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    <ul class="nav navbar-nav navbar-right">
-        <li><a href="{% url 'examination:paper_info' paper.pk %}">返回</a></li>
+{% block body_block %}
+<div class="container float-center">
+    <br>
+    <a href="{% url 'examination:paper_info' paper.pk %}" class="btn btn-primary float-left">返回</a>
+    <br>
+    <h2>{{ paper.title }}</h2>
+
+    <!-- <h6>选择题 {{ paper.multiple_choice_question_count }} 道， 共{{ paper.multiple_choice_question_total_score }} 分</h6>
+    <h6>问答题 {{ paper.essay_question_count }} 道， 共{{ paper.essay_question_total_score }} 分</h6>
+    <h6>试卷总分： {{ paper.multiple_choice_question_total_score|add:paper.essay_question_total_score }} 分</h6> -->
+    <br>
+
+    <form action="{% url 'student:do_paper_multiple_choice' paper.pk %}" class="text-left" method="POST">
+        <hr><br>
+        <h3 class="text-primary">选择题部分 ({{ paper.multiple_choice_question_set.all|length}} 道， 共{{ paper.multiple_choice_question_total_score }} 分)</h3><br>
+        {% for question in paper.multiple_choice_question_set.all %}
+        <h6>
+            {{ forloop.counter }}. {{ question.title }} &nbsp;&nbsp;&nbsp;&nbsp; 
+        </h6>
+        
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">&nbsp;&nbsp;
+            <label class="form-check-label" for="exampleRadios1">
+                A.&nbsp;&nbsp;{{ question.option_A }}
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">&nbsp;&nbsp;
+            <label class="form-check-label" for="exampleRadios2">
+                B.&nbsp;&nbsp;{{ question.option_B }}
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option3">&nbsp;&nbsp;
+            <label class="form-check-label" for="exampleRadios2">
+                C.&nbsp;&nbsp;{{ question.option_C }}
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option4">&nbsp;&nbsp;
+            <label class="form-check-label" for="exampleRadios2">
+                D.&nbsp;&nbsp;{{ question.option_D }}
+            </label>
+        </div>
+        <br>
+        <p class="text-success">正确答案：{{ question.right_answer }}</p>
+        <p class="text-success">分值：{{ question.point }}</p>
         {% if not paper.is_published %}
-        <li><a href="{% url 'examination:publish_paper' paper.pk%}">发布试卷</a></li>
+        <a href="{% url 'examination:modify_multiple_choice_question' question.pk %}" class="btn btn-primary btn-sm">修改</a>
+        <br>
         {% endif %}
-        <li><a href="">导出试卷</a></li>
-    </ul>
-</div>
-{% endblock %}
+        <br><br>
+        {% endfor %}
 
-{% block content_block%}
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-        <div class="card" style="max-width: 100rem;">
-            <div class="card-header">
-                <h2>{{ paper.title }}</h2>
-            </div>
-            <div class="card-body">
-                <h6>选择题 {{ paper.multiple_choice_question_count }} 道， 共{{ paper.multiple_choice_question_total_score }} 分</h6>
-                <h6>问答题 {{ paper.essay_question_count }} 道， 共{{ paper.essay_question_total_score }} 分</h6>
-                <h6>试卷总分： {{ paper.multiple_choice_question_total_score|add:paper.essay_question_total_score }} 分</h6>
-                
-                <br><br>
-
-                <h3>选择题部分</h3>
-                {% for question in paper.multiple_choice_question_set.all %}
-                <h4>
-                    {{ forloop.counter }}. {{ question.title }} &nbsp;&nbsp;&nbsp;&nbsp; 
-                </h4>
-                
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">&nbsp;&nbsp;
-                    <label class="form-check-label" for="exampleRadios1">
-                        A.&nbsp;&nbsp;{{ question.option_A }}
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">&nbsp;&nbsp;
-                    <label class="form-check-label" for="exampleRadios2">
-                        B.&nbsp;&nbsp;{{ question.option_B }}
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option3">&nbsp;&nbsp;
-                    <label class="form-check-label" for="exampleRadios2">
-                        C.&nbsp;&nbsp;{{ question.option_C }}
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option4">&nbsp;&nbsp;
-                    <label class="form-check-label" for="exampleRadios2">
-                        D.&nbsp;&nbsp;{{ question.option_D }}
-                    </label>
-                </div>
-                <p>正确答案：{{ question.right_answer }}</p>
-                <p>分值：{{ question.point }}</p>
-                {% if not paper.is_published %}
-                <a href="{% url 'examination:modify_multiple_choice_question' question.pk %}" class="btn btn-primary btn-sm">修改</a>
-                {% endif %}
-                <br><br>
-                {% endfor %}
-
-                <h3>问答题部分</h3>
-                {% for question in paper.essay_question_set.all %}
-                <h4>
-                    {{ forloop.counter }}. {{ question.title }} &nbsp;&nbsp;&nbsp;&nbsp; <br>
-                    <p>参考答案：</p><br>
-                    {{ question.right_answer }} <br>
-                    {% if not paper.is_published %}
-                    <a href="{% url 'examination:modify_essay_question' question.pk %}" class="btn btn-primary btn-sm">修改</a>
-                    {% endif %}
-                </h4>
-                {% endfor %}
-            </div>
-        </div>
-
-        </div>
-    </div>
+        <hr><br>
+        <h3 class="text-primary">问答题部分 ({{ paper.essay_question_set.all|length }} 道， 共{{ paper.essay_question_total_score }} 分)</h3>
+        <br>
+        {% for question in paper.essay_question_set.all %}
+        <h6>
+            {{ forloop.counter }}. {{ question.title }} &nbsp;&nbsp;&nbsp;&nbsp; <br>
+        </h6>
+            <p class="text-success">分值：
+            {{ question.point }} <br></p>
+            <p class="text-success">参考答案：<br>
+            {{ question.right_answer }} <br></p>
+            {% if not paper.is_published %}
+            <a href="{% url 'examination:modify_essay_question' question.pk %}" class="btn btn-primary btn-sm">修改</a>
+            <br>
+            {% endif %}
+            <br><br>
+        {% endfor %}
+    </form>
 </div>
 {% endblock %}

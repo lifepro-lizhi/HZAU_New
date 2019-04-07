@@ -8,9 +8,7 @@ from datetime import date, timedelta
 class Paper(models.Model):
     title = models.CharField(max_length=1000)
     description = models.TextField()
-    multiple_choice_question_count = models.IntegerField(default=0)
     multiple_choice_question_total_score = models.IntegerField(default=0)
-    essay_question_count = models.IntegerField(default=0)
     essay_question_total_score = models.IntegerField(default=0)
     publish_date = models.DateField(auto_now=True)
     expire_date = models.DateField(default=date.today() + timedelta(days=30))  # default expire date is 30 days from now on
@@ -24,25 +22,21 @@ class Paper(models.Model):
         return reverse('examination:paper_detail', args=[self.id])
     
     def save(self, *args, **kwargs):
-        questions = self.multiple_choice_question_set.all()
-        self.multiple_choice_question_count = len(questions)
-
+        multiple_choice_questions = self.multiple_choice_question_set.all()
         self.multiple_choice_question_total_score = 0
-        for question in questions:
+        for question in multiple_choice_questions:
             self.multiple_choice_question_total_score += question.point
 
-        questions = self.essay_question_set.all()
-        self.essay_question_count = len(questions)
-
+        essay_questions = self.essay_question_set.all()
         self.essay_question_total_score = 0
-        for question in questions:
+        for question in essay_questions:
             self.essay_question_total_score += question.point
 
         super().save(*args, **kwargs)  # Call the "real" save() method.
 
 
 class Multiple_Choice_Question(models.Model):
-    paper = models.ForeignKey(Paper, on_delete=models.SET_NULL, null=True)
+    paper = models.ForeignKey(Paper, on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=1000)
     option_A = models.CharField(max_length=1000)
     option_B = models.CharField(max_length=1000)
@@ -63,10 +57,14 @@ class Multiple_Choice_Question(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)  # Call the "real" save() method.
         self.paper.save()
+    
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)  # Call the "real" delete() method.
+        self.paper.save()
 
 
 class Essay_Question(models.Model):
-    paper = models.ForeignKey(Paper, on_delete=models.SET_NULL, null=True)
+    paper = models.ForeignKey(Paper, on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=1000)
     point = models.IntegerField()
     right_answer = models.TextField()
@@ -76,6 +74,10 @@ class Essay_Question(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)  # Call the "real" save() method.
+        self.paper.save()
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)  # Call the "real" delete() method.
         self.paper.save()
 
 

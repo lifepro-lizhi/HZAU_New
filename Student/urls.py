@@ -19,4 +19,5 @@ urlpatterns = [
     path('do_paper_essay/<int:paper_id>', views.do_paper_essay, name='do_paper_essay'),
     path('essay_comment_pick/<int:paper_id>', views.essay_comment_pick, name='essay_comment_pick'),
     path('pick_random_paper/<int:paper_id>', views.pick_random_paper, name='pick_random_paper'),
+    path('do_comment/<int:paper_answer_id>', views.do_comment, name='do_comment'),
 ]

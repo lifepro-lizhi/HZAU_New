@@ -1,0 +1,43 @@
+{% extends 'student/do_paper_base.html' %}
+
+{% block head_title_block%}
+问答题互评
+{% endblock %}
+
+{% block body_block %}
+<div class="container">
+<br><br>
+
+<h2 class="text-center">{{ paper_answer.paper.title }} (问答题互评)</h2>
+<br>
+
+<form action="{% url 'student:do_comment' paper_answer.pk %}" method="POST">
+    {% csrf_token %}
+    {% for essay_answer in essay_answers %}
+    <fieldset class="form-group" id="{{ question.pk }}">
+        <div class="row">
+            <div class="float-left">
+                <p>{{ forloop.counter }}.  {{ essay_answer.essay_question.title }} ({{ essay_answer.essay_question.point }}分)</p>
+                <div class="form-check">
+                    <p class="h6">学生回答：</p>
+                    <p>{{ essay_answer.student_answer }}</p>
+                    <p class="text-success">参考答案： <br>{{ essay_answer.essay_question.right_answer }}</p>
+                    <p class="h6">请输入你的评论：</p>
+                    <textarea cols="80" rows="10" name="essay_comment_comment.{{ essay_answer.pk }}"></textarea>
+                    <p class="h6">请输入你的评分：</p><input type="text" name="essay_comment_score.{{ essay_answer.pk }}">
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <br>
+    {% endfor %}
+    
+    <div class="form-group row">
+        <div class="col-sm-10">
+        <button type="submit" class="btn btn-primary">提交互评结果</button>
+        </div>
+    </div>
+</form>
+
+</div>
+{% endblock %}

@@ -5,6 +5,18 @@
 <link href="{% static 'basic/css/signin.css' %}" rel="stylesheet">
 {% endblock %}
 
+{% block style_block %}
+<!-- Styles -->	
+<style>
+    body 
+    {
+        background-image: url("{% static 'basic/image/background.jpg' %}");
+        background-repeat:no-repeat;
+        background-size:cover;
+    }
+</style>
+{% endblock %}
+
 {% block title_block%}
 注册
 {% endblock%}

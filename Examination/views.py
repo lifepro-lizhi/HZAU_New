@@ -179,6 +179,32 @@ def modify_essay_question(request, question_id):
         return render(request, 'examination/modify_essay_question.html', context=context)
 
 
+def delete_multiple_choice_question(request, question_id):
+    try:
+        question = Multiple_Choice_Question.objects.get(pk=question_id)
+    except Essay_Question.DoesNotExist:
+        raise Http404("Question does not exist")
+    
+    paper = question.paper
+    question.delete()
+    
+    messages.success(request, '修改成功！')
+    return HttpResponseRedirect(reverse('examination:paper_preview', args=[paper.pk]))
+
+def delete_essay_question(request, question_id):
+    try:
+        question = Essay_Question.objects.get(pk=question_id)
+    except Essay_Question.DoesNotExist:
+        raise Http404("Question does not exist")
+    
+    paper = question.paper
+    question.delete()
+
+    messages.success(request, '修改成功！')
+    return HttpResponseRedirect(reverse('examination:paper_preview', args=[paper.pk]))
+
+
+
 def modify_paper(request, paper_id):
     try:
         paper = Paper.objects.get(pk=paper_id)
@@ -191,6 +217,12 @@ def modify_paper(request, paper_id):
             paper.title = form.cleaned_data['title']
             paper.description = form.cleaned_data['description']
             paper.expire_date = form.cleaned_data['expire_date']
+
+            if request.POST['publish_state'] == 'unpublished':
+                paper.is_published = False
+            else:
+                paper.is_published = True
+
             paper.save()
             messages.success(request, '试卷修改成功！')
 

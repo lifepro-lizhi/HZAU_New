@@ -6,6 +6,7 @@
 
 {% block body_block %}
 <div class="container">
+<br><br>
 
 <h2 class="text-center">{{ paper.title }}（问答题部分）</h2>
 <br>
@@ -16,7 +17,7 @@
     <fieldset class="form-group" id="{{ question.pk }}">
         <div class="row">
             <div class="col-sm-10">
-                <p>{{ forloop.counter }}.{{ question.title }} ({{ question.point }}分)</p>
+                <p>{{ forloop.counter }}.  {{ question.title }} ({{ question.point }}分)</p>
                 <div class="form-check">
                     <textarea cols="80" rows="10" name="question.{{ question.pk }}"></textarea>
                 </div>

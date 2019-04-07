@@ -9,8 +9,8 @@
 {% load get_student_answer %}
 
 <div class="container">
-
-
+<br><br>
+<a href="{% url 'student:do_paper_type_choose' paper.pk %}" class="btn btn-primary">返回</a><br>
 <form action="" method="">
     {% csrf_token %}
     {% if is_essay_result == False %}
@@ -22,7 +22,7 @@
         <fieldset class="form-group" id="{{ question.pk }}">
             <div class="row">
                 <div class="col-sm-10">
-                    <p>{{ forloop.counter }}.{{ question.title }}</p>
+                    <p>{{ forloop.counter }}.{{ question.title }}  ({{ question.point }} 分)</p>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="question.{{ question.pk }}" id="option_A" value="A">
                         <label class="form-check-label" for="option_A">A.{{ question.option_A }}</label>
@@ -55,14 +55,15 @@
         <br>
         {% endfor %}
     {% else %}
-        <h2 class="text-center">{{ paper.title }}（问答题部分）</h2>
-        {% for question, answer in questions_and_answers %}
+        <h2 class="text-center">{{ paper.title }}（问答题部分）</h2><br>
+        {% for essay_answer in essay_answers %}
             <fieldset class="form-group" id="{{ question.pk }}">
                 <div class="row">
-                    <div class="col-sm-10">
-                        <p>{{ forloop.counter }}.{{ question.title }}</p>
+                    <div class="float-left">
+                        <p>{{ forloop.counter }}.  {{ essay_answer.essay_question.title }}  ({{ essay_answer.essay_question.point }} 分)</p>
                         <div class="form-check">
-                            <textarea name="" id="" cols="80" rows="10" name="question.{{ question.pk }}">{{ answer }}</textarea>
+                            <p name="" id="" cols="80" rows="10" name="question.{{ question.pk }}">{{ essay_answer.student_answer }}</p>
+                            <p class="text-success">参考答案： {{ essay_answer.essay_question.right_answer }}</p>
                         </div>
                     </div>
                 </div>

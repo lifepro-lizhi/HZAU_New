@@ -13,8 +13,8 @@
     <a href="{% url 'examination:create_essay_question' paper.pk %}">添加问答题</a>
     <a href="">发布试卷</a>
     <a href="{% url 'teacher:index' %}">返回</a>
-    <p>已添加选择题: {{ paper.multiple_choice_question_count }} 道, 选择题总分: {{ paper.multiple_choice_question_total_score }}</p>
-    <p>已添加问答题: {{ paper.essay_question_count }} 道, 问答题总分: {{ paper.essay_question_total_score }}</p>
+    <p>已添加选择题: {{ paper.multiple_choice_question_set.all|length }} 道, 选择题总分: {{ paper.multiple_choice_question_total_score }}</p>
+    <p>已添加问答题: {{ paper.essay_question_set.all|length }} 道, 问答题总分: {{ paper.essay_question_total_score }}</p>
     <p>试卷总分: {{ paper.multiple_choice_question_total_score|add:paper.essay_question_total_score }}</p>
 </body>
 </html>

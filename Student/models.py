@@ -29,12 +29,14 @@ class PaperResult(models.Model):
         return "{} ( {} )".format(self.paper.title, self.student.name)
 
 
+# collection of essay_answers for specific paper and student
 class PaperAnswer(models.Model):
     paper = models.ForeignKey(Paper, on_delete=models.SET_NULL, null=True)
     student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
     comments_count = models.IntegerField(default=0)
 
 
+# one single essay_answer for specific essay_question and student
 class EssayAnswer(models.Model):
     paper_answer = models.ForeignKey(PaperAnswer, on_delete=models.SET_NULL, null=True)
     essay_question = models.ForeignKey(Essay_Question, on_delete=models.SET_NULL, null=True)
@@ -44,8 +46,9 @@ class EssayAnswer(models.Model):
         return "{} - {} ({})".format(self.essay_question.paper.title, self.essay_question.title, student.name)
 
 
+# comment for specific essay_answer
 class EssayComment(models.Model):
     essay_answer = models.ForeignKey(EssayAnswer, on_delete=models.SET_NULL, null=True)
     student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
-    comment = models.TextField()
-    score = models.IntegerField()
+    comment = models.TextField(null=True)
+    score = models.IntegerField(null=True)

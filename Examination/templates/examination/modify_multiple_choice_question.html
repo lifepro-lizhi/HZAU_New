@@ -53,7 +53,7 @@
                 </div>
                 
                 <button type="submit" class="btn btn-primary">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button class="btn btn-danger">删除</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a class="btn btn-danger" href="{% url 'examination:delete_multiple_choice_question' question.pk %}">删除</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </form>
 
         </div>
