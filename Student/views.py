@@ -323,18 +323,22 @@ def do_comment(request, paper_answer_id):
 
                 essay_comment = EssayComment.objects.filter(essay_answer=essay_answer, student=student).first()
                 if essay_comment == None:
+                    print('bbb')
                     essay_comment = EssayComment()
                     essay_comment.essay_answer = essay_answer
                     essay_comment.student = student
                 
                 if 'essay_comment_comment' in key:
+                    print('ccc')
                     comment = request.POST[key]
                     essay_comment.comment = comment
-                elif 'essay_comment_score' in key:
+
+                if 'essay_comment_score' in key:
+                    print('ddd')
                     score = request.POST[key]
                     essay_comment.score = score
                 
-                # essay_comment.save()
+                essay_comment.save()
         
         paper_answers_to_add_comment = []
         paper_answer_ids = request.session['paper_answer_ids']

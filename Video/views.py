@@ -78,10 +78,8 @@ def video_delete(request, video_id):
     if request.method == 'POST':
         try:
             os.remove(video.video.path)
-            print('1111111111')
             video.delete()
         except:
-            print('22222222222222')
             video.delete()
 
         messages.success(request, '视频删除成功！')

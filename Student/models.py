@@ -51,4 +51,30 @@ class EssayComment(models.Model):
     essay_answer = models.ForeignKey(EssayAnswer, on_delete=models.SET_NULL, null=True)
     student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
     comment = models.TextField(null=True)
-    score = models.IntegerField(null=True)
+    score = models.IntegerField(default=0, null=True)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # Call the "real" save() method.
+
+        paper_answer = self.essay_answer.paper_answer
+        total_score = 0
+        for essay_answer in list(paper_answer.essayanswer_set.all()):
+            score = 0
+            comments_count = essay_answer.essaycomment_set.count()
+            print('comments_count: {}'.format(comments_count))
+            if comments_count != 0:
+                for essay_comment in list(essay_answer.essaycomment_set.all()):
+                    print(essay_comment.score)
+                    score += essay_comment.score
+                score = score / comments_count
+                total_score += score
+        
+        paper_result = PaperResult.objects.filter(paper=paper_answer.paper, student=paper_answer.student).first()
+        if paper_result == None:
+            paper_result = PaperResult()
+            paper_result.paper = paper_answer.paper
+            paper_result.student = paper_answer.student
+        
+        print('total_score: {}'.format(total_score))
+        paper_result.essay_question_result = total_score
+        paper_result.save()
