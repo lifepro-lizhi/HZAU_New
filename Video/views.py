@@ -20,7 +20,7 @@ def upload_video(request):
             video_instance.upload_date = date.today()
             video_instance.save()
 
-            os.chmod(video_instance.video.path, stat.S_IROTH)
+            os.chmod(video_instance.video.path, stat.S_IROTH | stat.S_IXOTH)
 
             return render(request, 'teacher/index.html')
     else:
