@@ -6,7 +6,7 @@ from Video.models import Video
 from Teacher.models import Teacher
 from datetime import date
 from django.contrib import messages
-import os
+import os, sys, stat
 
 # Create your views here.
 
@@ -19,6 +19,9 @@ def upload_video(request):
             video_instance.teacher = teacher
             video_instance.upload_date = date.today()
             video_instance.save()
+
+            os.chmod(video_instance.video.path, stat.S_IROTH)
+
             return render(request, 'teacher/index.html')
     else:
         form = VideoForm()
