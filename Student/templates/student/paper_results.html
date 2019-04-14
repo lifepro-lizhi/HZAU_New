@@ -19,7 +19,7 @@
                 <th scope="col">总分</th>
                 <th scope="col">选择题</th>
                 <th scope="col">问答题</th>
-                <th scope="col"></th>
+                <th scope="col">问答题互评详情</th>
             </tr>
         </thead>
         <tbody>
@@ -30,7 +30,7 @@
                 <td>{{ result.essay_question_result|add:result.choice_question_result }}</td>
                 <td>{{ result.choice_question_result }}</td>
                 <td>{{ result.essay_question_result }}</td>
-                <td><a href="">详情</a></td>
+                <td><a href="{% url 'student:essay_comment_detail' result.pk %}" class="btn btn-primary btn-sm">详情</a></td>
             </tr>
             {% endfor %}
         </tbody>

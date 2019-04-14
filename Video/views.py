@@ -91,8 +91,3 @@ def video_delete(request, video_id):
         context = {'video': video}
         return render(request, 'video/video_delete.html', context=context)
     
-
-
-
-
-

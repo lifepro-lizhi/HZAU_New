@@ -25,10 +25,12 @@
                 <th scope="col">#</th>
                 <th scope="col">学号</th>
                 <th scope="col">学生姓名</th>
+                <th scope="col">所在班级</th>
                 <th scope="col">总分</th>
                 <th scope="col">选择题</th>
                 <th scope="col">问答题</th>
                 <th scope="col">提交时间</th>
+                <th scope="col">问答题互评详情</th>
             </tr>
         </thead>
         <tbody>
@@ -37,10 +39,12 @@
                     <th scope="row">{{ forloop.counter }}</th>
                     <td>{{ result.student.student_id }}</td>
                     <td>{{ result.student.name }}</td>
+                    <td>{{ result.student.grade_class.title }}</td>
                     <td>{{ result.essay_question_result|add:result.choice_question_result }}</td>
                     <td>{{ result.choice_question_result }}</td>
                     <td>{{ result.essay_question_result }}</td>
                     <td>{{ result.submit_date|date }}</td>
+                    <td><a href="{% url 'student:essay_comment_detail' result.pk %}" class="btn btn-primary btn-sm">详情</a></td>
                 </tr>
             {% endfor %}
         </tbody>

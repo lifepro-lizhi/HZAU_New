@@ -1,0 +1,49 @@
+{% extends "student/base.html" %}
+
+{% block head_title_block %}
+已完成试卷
+{% endblock %}
+
+{% block title_block %}
+<h3>已完成试卷</h3>
+{% endblock %}
+
+{% block navbar_block %}
+ <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav navbar-right">
+    </ul>
+</div>
+{% endblock %}
+
+{% block content_block%}
+<div class="container">
+    <h3>已完成试卷</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">试卷标题</th>
+                <th scope="col">出题人</th>
+                <th scope="col">考试总分</th>
+                <th scope="col">选择题得分</th>
+                <th scope="col">问答题得分</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for paper_result in paper_results %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ paper_result.paper.title }}</td>
+                <td>{{ paper_result.paper.paper_maker.name }}</td>
+                <td>{{ paper_result.choice_question_result|add:paper_result.essay_question_result}} /
+                    {{ paper_result.paper.multiple_choice_question_total_score|add:paper_result.paper.essay_question_total_score }}
+                </td>
+                <td>{{ paper_result.choice_question_result }} / {{ paper_result.paper.multiple_choice_question_total_score }}</td>
+                <td>{{ paper_result.paper_result.essay_question_result }} / {{ paper_result.paper.essay_question_total_score }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

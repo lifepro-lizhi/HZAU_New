@@ -23,8 +23,10 @@
                     <p>{{ essay_answer.student_answer }}</p>
                     <p class="text-success">参考答案： <br>{{ essay_answer.essay_question.right_answer }}</p>
                     <p class="h6">请输入你的评论：</p>
-                    <textarea cols="80" rows="10" name="essay_comment_comment.{{ essay_answer.pk }}"></textarea>
-                    <p class="h6">请输入你的评分：</p><input type="text" name="essay_comment_score.{{ essay_answer.pk }}">
+                    <textarea cols="80" rows="10" name="essay_comment_comment.{{ essay_answer.pk }}" required></textarea>
+                    <p class="h6">请输入你的评分：(0分 -- {{ essay_answer.essay_question.point }}分)</p>
+                    <input type="number" title="请输入范围以内的数值" min="0" max="{{ essay_answer.essay_question.point }}" style="width: 7em" 
+                     name="essay_comment_score.{{ essay_answer.pk }}" required>
                 </div>
             </div>
         </div>

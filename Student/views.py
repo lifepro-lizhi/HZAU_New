@@ -323,18 +323,15 @@ def do_comment(request, paper_answer_id):
 
                 essay_comment = EssayComment.objects.filter(essay_answer=essay_answer, student=student).first()
                 if essay_comment == None:
-                    print('bbb')
                     essay_comment = EssayComment()
                     essay_comment.essay_answer = essay_answer
                     essay_comment.student = student
                 
                 if 'essay_comment_comment' in key:
-                    print('ccc')
                     comment = request.POST[key]
                     essay_comment.comment = comment
 
                 if 'essay_comment_score' in key:
-                    print('ddd')
                     score = request.POST[key]
                     essay_comment.score = score
                 
@@ -356,11 +353,30 @@ def do_comment(request, paper_answer_id):
         context = {'paper_answer': paper_answer,
                 'essay_answers': essay_answers}
         return render(request, 'student/do_comment.html', context=context)
+
+
+def completed_papers(request):
+    student = Student.objects.get(user=request.user)
+
+    paper_results = list(PaperResult.objects.filter(student=student, does_choice_question_submit=True, does_essay_question_submit=True))
+
+    context = {'paper_results': paper_results}
+    return render(request, 'student/completed_papers.html', context=context)
+
+
+def essay_comment_detail(request, result_id):
+    try:
+        paper_result = PaperResult.objects.get(pk=result_id)
+    except PaperResult.DoesNotExist:
+        raise Http404("PaperResult does not exist")
     
+    paper = paper_result.paper
+    student = paper_result.student
+    paper_answer = PaperAnswer.objects.get(paper=paper, student=student)
 
+    essay_answers = paper_answer.essayanswer_set.all()
+    context = {'essay_answers': essay_answers}
 
-
-
-
-
+    return render(request, 'student/essay_comment_detail.html', context=context)
+    
 

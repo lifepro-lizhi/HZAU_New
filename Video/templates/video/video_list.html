@@ -31,7 +31,11 @@
                     <td>{{ video.teacher.name }}</td>
                     <td>{{ video.upload_date|date }}</td>
                     <td><a href="{% url 'video:video_play' video.pk %}">观看</a></td>
-                    <td><a href="{% url 'video:video_manage' video.pk %}">管理</a></td>
+                    {% if video.teacher == user.teacher %}
+                        <td><a href="{% url 'video:video_manage' video.pk %}">管理</a></td>
+                    {% else %}
+                        <td><a href="">管理（无权限）</a></td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </tbody>

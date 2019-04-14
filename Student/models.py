@@ -51,7 +51,7 @@ class EssayComment(models.Model):
     essay_answer = models.ForeignKey(EssayAnswer, on_delete=models.SET_NULL, null=True)
     student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
     comment = models.TextField(null=True)
-    score = models.IntegerField(default=0, null=True)
+    score = models.FloatField(default=0, null=True)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)  # Call the "real" save() method.

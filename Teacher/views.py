@@ -115,3 +115,8 @@ def paper_results_list(request):
     papers_result_list = zip(papers, paper_results)
     context = {'papers_result_list': papers_result_list}
     return render(request, 'teacher/paper_results_list.html', context=context)
+
+
+
+    
+
