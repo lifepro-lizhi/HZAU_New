@@ -14,6 +14,7 @@ import random
 
 # Create your views here.
 
+@login_required
 def index(request):
     return render(request, 'student/index.html')
     # return render(request, 'basic/sidebar_base.html')
@@ -101,6 +102,7 @@ def student_logout(request):
     return HttpResponseRedirect(reverse('basic:index'))
 
 
+@login_required
 def paper_list(request, showEssayComment):
     papers = Paper.objects.filter(is_published__exact=True)
     context = {'papers' : papers,
@@ -108,6 +110,7 @@ def paper_list(request, showEssayComment):
     return render(request, 'student/paper_list.html', context=context)
 
 
+@login_required
 def paper_info(request, paper_id):
     try:
         paper = Paper.objects.get(pk=paper_id)
@@ -126,6 +129,7 @@ def paper_info(request, paper_id):
     return render(request, 'student/paper_info.html', context=context)
 
 
+@login_required
 def do_paper_type_choose(request, paper_id):
     paper = Paper.objects.get(pk=paper_id)
     student = Student.objects.get(user=request.user)
@@ -142,6 +146,7 @@ def do_paper_type_choose(request, paper_id):
     return render(request, 'student/do_paper_type_choose.html', context)
 
 
+@login_required
 def do_paper_multiple_choice(request, paper_id):
     if request.method == 'POST':
         score = 0
@@ -191,6 +196,7 @@ def do_paper_multiple_choice(request, paper_id):
             return render(request, 'student/do_paper_result.html', context)
 
 
+@login_required
 def do_paper_essay(request, paper_id):
     paper = Paper.objects.get(pk=paper_id)
     student = Student.objects.get(user=request.user)
@@ -254,6 +260,7 @@ def do_paper_essay(request, paper_id):
             return render(request, 'student/do_paper_result.html', context)
 
 
+@login_required
 def paper_results(request):
     student = Student.objects.get(user=request.user)
     results = PaperResult.objects.filter(student=student)
@@ -262,6 +269,7 @@ def paper_results(request):
     return render(request, 'student/paper_results.html', context)
 
 
+@login_required
 def video_list(request):
     videos = Video.objects.all()
     context = {'videos': videos}
@@ -269,6 +277,7 @@ def video_list(request):
     return render(request, 'student/video_list.html', context=context)
 
 
+@login_required
 def essay_comment_pick(request, paper_id):
     paper = Paper.objects.get(pk=paper_id)
     context = {'paper': paper}
@@ -276,6 +285,7 @@ def essay_comment_pick(request, paper_id):
     return render(request, 'student/essay_comment_pick.html', context=context)
 
 
+@login_required
 def pick_random_paper(request, paper_id):
     paper = Paper.objects.get(pk=paper_id)
     paper_commits_count = len(paper.paperanswer_set.all())
@@ -311,6 +321,7 @@ def pick_random_paper(request, paper_id):
         return HttpResponseRedirect(reverse('student:essay_comment_pick', args=[paper.pk]))
 
 
+@login_required
 def do_comment(request, paper_answer_id):
     paper_answer = PaperAnswer.objects.get(pk=paper_answer_id)
     student = Student.objects.get(user=request.user)
@@ -355,6 +366,7 @@ def do_comment(request, paper_answer_id):
         return render(request, 'student/do_comment.html', context=context)
 
 
+@login_required
 def completed_papers(request):
     student = Student.objects.get(user=request.user)
 
@@ -364,6 +376,7 @@ def completed_papers(request):
     return render(request, 'student/completed_papers.html', context=context)
 
 
+@login_required
 def essay_comment_detail(request, result_id):
     try:
         paper_result = PaperResult.objects.get(pk=result_id)

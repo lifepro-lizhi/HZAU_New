@@ -21,7 +21,7 @@
     <divc class="row">
     <ul class="list-group col-md-6 col-md-offset-3">
         <li class="list-group-item">标题：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ paper.title }}</li>
-        <li class="list-group-item">描述：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ paper.description}}</li>
+        <li class="list-group-item">描述：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ paper.description|linebreaks }}</li>
         <li class="list-group-item">出题人：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ paper.paper_maker.name }}</li>
         <li class="list-group-item">试卷总分：&nbsp;&nbsp;&nbsp;{{ paper.multiple_choice_question_total_score|add:paper.essay_question_total_score}}</li>
         <li class="list-group-item">选择题：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ paper.multiple_choice_question_set.all|length }} 道， 共 {{ paper.multiple_choice_question_total_score }} 分</li>

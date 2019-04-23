@@ -7,9 +7,11 @@ from Student.models import PaperResult
 from datetime import date
 from django.contrib import messages
 from Teacher.models import Teacher
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+@login_required
 def create_paper(request):
     if request.method == 'POST':
         form = PaperForm(request.POST)
@@ -28,6 +30,7 @@ def create_paper(request):
         return render(request, 'examination/create_paper.html', context=context)
 
 
+@login_required
 def choose_create_type(request, paper_id):
     try:
         paper = Paper.objects.get(pk=paper_id)
@@ -38,6 +41,7 @@ def choose_create_type(request, paper_id):
     return render(request, 'examination/choose_create_type.html', context)
 
 
+@login_required
 def create_multiple_choice_question(request, paper_id):
     try:
         paper = Paper.objects.get(pk=paper_id)
@@ -68,6 +72,7 @@ def create_multiple_choice_question(request, paper_id):
         return render(request, 'examination/create_multiple_choice_question.html', context=context)
 
 
+@login_required
 def create_essay_question(request, paper_id):
     try:
         paper = Paper.objects.get(pk=paper_id)
@@ -98,6 +103,7 @@ def create_essay_question(request, paper_id):
         return render(request, 'examination/create_essay_question.html', context=context)
 
 
+@login_required
 def paper_list(request):
     teacher = Teacher.objects.get(user=request.user)
     papers_published = Paper.objects.filter(is_published__exact=True, paper_maker=teacher)
@@ -106,6 +112,7 @@ def paper_list(request):
     return render(request, 'examination/paper_list.html', context=context)
 
 
+@login_required
 def paper_detail(request, paper_id):
     try:
         paper = Paper.objects.get(pk=paper_id)
@@ -116,6 +123,9 @@ def paper_detail(request, paper_id):
     return render(request, 'examination/paper_detail.html', context=context)
 
 
+
+
+@login_required
 def paper_preview(request, paper_id):
     try:
         paper = Paper.objects.get(pk=paper_id)
@@ -126,6 +136,7 @@ def paper_preview(request, paper_id):
     return render(request, 'examination/paper_preview.html', context=context)
 
 
+@login_required
 def modify_multiple_choice_question(request, question_id):
     try:
         question = Multiple_Choice_Question.objects.get(pk=question_id)
@@ -154,6 +165,8 @@ def modify_multiple_choice_question(request, question_id):
         context = {'form' : form, 'question' : question}
         return render(request, 'examination/modify_multiple_choice_question.html', context=context)
 
+
+@login_required
 def modify_essay_question(request, question_id):
     try:
         question = Essay_Question.objects.get(pk=question_id)
@@ -179,6 +192,7 @@ def modify_essay_question(request, question_id):
         return render(request, 'examination/modify_essay_question.html', context=context)
 
 
+@login_required
 def delete_multiple_choice_question(request, question_id):
     try:
         question = Multiple_Choice_Question.objects.get(pk=question_id)
@@ -191,6 +205,8 @@ def delete_multiple_choice_question(request, question_id):
     messages.success(request, '修改成功！')
     return HttpResponseRedirect(reverse('examination:paper_preview', args=[paper.pk]))
 
+
+@login_required
 def delete_essay_question(request, question_id):
     try:
         question = Essay_Question.objects.get(pk=question_id)
@@ -204,7 +220,7 @@ def delete_essay_question(request, question_id):
     return HttpResponseRedirect(reverse('examination:paper_preview', args=[paper.pk]))
 
 
-
+@login_required
 def modify_paper(request, paper_id):
     try:
         paper = Paper.objects.get(pk=paper_id)
@@ -235,6 +251,7 @@ def modify_paper(request, paper_id):
         return render(request, 'examination/modify_paper.html', context=context)
 
 
+@login_required
 def publish_paper(request, paper_id):
     try:
         paper = Paper.objects.get(pk=paper_id)
@@ -250,6 +267,7 @@ def publish_paper(request, paper_id):
     return HttpResponseRedirect(reverse('examination:paper_list'))
 
 
+@login_required
 def delete_paper(request, paper_id):
     try:
         paper = Paper.objects.get(pk=paper_id)
@@ -271,6 +289,7 @@ def delete_paper(request, paper_id):
             return HttpResponseRedirect(reverse('examination:paper_info', args=[paper.pk]))
 
 
+@login_required
 def paper_info(request, paper_id):
     try:
         paper = Paper.objects.get(pk=paper_id)
@@ -281,6 +300,7 @@ def paper_info(request, paper_id):
     return render(request, 'examination/paper_info.html', context=context)
 
 
+@login_required
 def paper_results(request, paper_id):
     try:
         paper = Paper.objects.get(pk=paper_id)

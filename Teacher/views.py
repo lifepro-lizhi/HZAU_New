@@ -12,6 +12,7 @@ from Video.models import Video
 
 # Create your views here.
 
+@login_required
 def index(request):
     return render(request, 'teacher/index.html')
 

@@ -6,10 +6,12 @@ from Video.models import Video
 from Teacher.models import Teacher
 from datetime import date
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 import os, sys, stat
 
 # Create your views here.
 
+@login_required
 def upload_video(request):
     if request.method == 'POST':
         form = VideoForm(request.POST, request.FILES)
@@ -29,12 +31,14 @@ def upload_video(request):
         return render(request, 'video/upload_video.html', context=context)
 
 
+@login_required
 def video_list(request):
     videos = Video.objects.all()
     context = {'videos': videos}
     return render(request, 'video/video_list.html', context=context)
 
 
+@login_required
 def video_play(request, video_id):
     video = Video.objects.get(pk=video_id)
     url = video.video.url
@@ -42,6 +46,7 @@ def video_play(request, video_id):
     return render(request, 'video/video_play.html', context=context)
 
 
+@login_required
 def video_manage(request, video_id):
     try:
         video = Video.objects.get(pk=video_id)
@@ -52,6 +57,7 @@ def video_manage(request, video_id):
     return render(request, 'video/video_manage.html', context=context)
 
 
+@login_required
 def video_title_modify(request, video_id):
     try:
         video = Video.objects.get(pk=video_id)
@@ -72,6 +78,7 @@ def video_title_modify(request, video_id):
         return render(request, 'video/video_title_modify.html', context=context)
 
 
+@login_required
 def video_delete(request, video_id):
     try:
         video = Video.objects.get(pk=video_id)
