@@ -167,8 +167,12 @@ def do_paper_multiple_choice(request, paper_id):
         # if no corresponding paper_result exists, then create new one
         paper_result = PaperResult.objects.filter(paper=paper, student=student).first()
         if paper_result == None:
-            paper_result = PaperResult(paper=paper, student=student, submit_date=date.today())
+            # paper_result = PaperResult(paper=paper, student=student, submit_date=date.today())
+             paper_result = PaperResult()
 
+        paper_result.paper = paper
+        paper_result.student = student
+        paper_result.submit_date = date.today()
         paper_result.choice_question_result = score
         paper_result.does_choice_question_submit = True
         paper_result.save()
