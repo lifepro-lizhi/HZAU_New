@@ -9,6 +9,7 @@ from Examination.models import Paper
 from Teacher.models import Teacher
 from Student.models import PaperResult
 from Video.models import Video
+import csv
 
 # Create your views here.
 
@@ -118,6 +119,24 @@ def paper_results_list(request):
     return render(request, 'teacher/paper_results_list.html', context=context)
 
 
+@login_required
+def export_paper_results(request, paper_id):
+    paper = Paper.objects.get(pk=paper_id)
+    paper_results = list(PaperResult.objects.filter(paper=paper, does_choice_question_submit=True, does_essay_question_submit=True))
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="result_csv.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['学号', '学生姓名', '班级', '总分数', '选择题得分', '问答题得分', '提交时间'])
+
+    for result in paper_results:
+        writer.writerow([result.student.student_id, result.student.name, result.student.grade_class.title, 
+                         result.essay_question_result + result.choice_question_result, 
+                         result.choice_question_result, 
+                         result.essay_question_result,
+                         result.submit_date])
+    return response
 
     
 
