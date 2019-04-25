@@ -13,7 +13,7 @@ class Paper(models.Model):
     publish_date = models.DateField(auto_now=True)
     expire_date = models.DateField(default=date.today() + timedelta(days=30))  # default expire date is 30 days from now on
     is_published = models.BooleanField(default=False)
-    paper_maker = models.ForeignKey(Teacher, on_delete=models.SET_NULL, null=True) 
+    paper_maker = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True) 
 
     def __str__(self):
         return self.title

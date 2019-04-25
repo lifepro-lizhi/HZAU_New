@@ -16,7 +16,7 @@ def user_directory_path(instance, filename):
 
 class Video(models.Model):
     title = models.CharField(max_length=255)
-    teacher = models.ForeignKey(Teacher, on_delete=models.SET_NULL, null=True)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     upload_date = models.DateField(auto_now=True)
     video = models.FileField(upload_to=user_directory_path)
 

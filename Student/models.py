@@ -17,8 +17,8 @@ class Student(models.Model):
 
 
 class PaperResult(models.Model):
-    paper = models.ForeignKey(Paper, on_delete=models.SET_NULL, null=True)
-    student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
+    paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
     choice_question_result = models.IntegerField(default=0)
     essay_question_result = models.IntegerField(default=0)
     does_choice_question_submit = models.BooleanField(default=False)
@@ -31,15 +31,15 @@ class PaperResult(models.Model):
 
 # collection of essay_answers for specific paper and student
 class PaperAnswer(models.Model):
-    paper = models.ForeignKey(Paper, on_delete=models.SET_NULL, null=True)
-    student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
+    paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
     comments_count = models.IntegerField(default=0)
 
 
 # one single essay_answer for specific essay_question and student
 class EssayAnswer(models.Model):
-    paper_answer = models.ForeignKey(PaperAnswer, on_delete=models.SET_NULL, null=True)
-    essay_question = models.ForeignKey(Essay_Question, on_delete=models.SET_NULL, null=True)
+    paper_answer = models.ForeignKey(PaperAnswer, on_delete=models.CASCADE)
+    essay_question = models.ForeignKey(Essay_Question, on_delete=models.CASCADE)
     student_answer = models.TextField()
 
     def __str__(self):
@@ -48,8 +48,8 @@ class EssayAnswer(models.Model):
 
 # comment for specific essay_answer
 class EssayComment(models.Model):
-    essay_answer = models.ForeignKey(EssayAnswer, on_delete=models.SET_NULL, null=True)
-    student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
+    essay_answer = models.ForeignKey(EssayAnswer, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
     comment = models.TextField(null=True)
     score = models.FloatField(default=0, null=True)
 
