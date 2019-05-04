@@ -1,0 +1,31 @@
+{% extends "student/base.html" %}
+
+{% block head_title_block %}
+学生信息
+{% endblock %}
+
+{% block title_block %}
+<h3>学生信息</h3>
+{% endblock %}
+
+{% block navbar_block %}
+ <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav navbar-right">
+    </ul>
+</div>
+{% endblock %}
+
+{% block content_block%}
+<div class="container">
+    <divc class="row">
+    <ul class="list-group col-md-6 col-md-offset-3">
+        <li class="list-group-item" style="white-space:pre;">学生姓名：               {{ student.name }}</li>
+        <li class="list-group-item" style="white-space:pre;">班级：                       {{ student.grade_class }}</li>
+        <li class="list-group-item" style="white-space:pre;">上次登录时间：       {{ user.last_login }}</li>
+        <br>
+        
+    </ul>
+
+    </div>
+</div>
+{% endblock %}

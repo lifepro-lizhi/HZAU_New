@@ -16,6 +16,8 @@
 {% endblock %}
 
 {% block content_block%}
+{% load already_do_comment %}
+
 <div class="container">
     <h3>互评试卷</h3>
     <table class="table table-striped">
@@ -24,7 +26,8 @@
                 <th scope="col">#</th>
                 <th scope="col">试卷标题</th>
                 <th scope="col">出题人</th>
-                <th scope="col"></th>
+                <th scope="col">答题学生</th>
+                <th scope="col">已互评人数</th>
             </tr>
         </thead>
         <tbody>
@@ -33,7 +36,11 @@
                 <th scope="row">{{ forloop.counter }}</th>
                 <td>{{ paper.title }}</td>
                 <td>{{ paper.paper_maker.name }}</td>
-                {% if paper_answer.essayanswer_set.all.0.essaycomment_set.all.0.student == user.student%}
+                <td>{{ paper_answer.student.name }}</td>
+                <td>{{paper_answer.essayanswer_set.all.0.essaycomment_set.all|length}}</td>
+                {#{% if paper_answer.essayanswer_set.all.0.essaycomment_set.all.0.student == user.student%}#}
+                {% already_do_comment user.student paper_answer.essayanswer_set.all.0.essaycomment_set.all as already_done %}
+                {% if already_done %}
                     <td><button class="btn btn-info btn-sm">已互评</button></td>
                 {% else %}
                     <td><a href="{% url 'student:do_comment' paper_answer.pk %}" class="btn btn-primary btn-sm">互评</a></td>

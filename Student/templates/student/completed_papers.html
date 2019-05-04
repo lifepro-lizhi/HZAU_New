@@ -40,7 +40,7 @@
                     {{ paper_result.paper.multiple_choice_question_total_score|add:paper_result.paper.essay_question_total_score }}
                 </td>
                 <td>{{ paper_result.choice_question_result }} / {{ paper_result.paper.multiple_choice_question_total_score }}</td>
-                <td>{{ paper_result.paper_result.essay_question_result }} / {{ paper_result.paper.essay_question_total_score }}</td>
+                <td>{{ paper_result.essay_question_result }} / {{ paper_result.paper.essay_question_total_score }}</td>
             </tr>
             {% endfor %}
         </tbody>

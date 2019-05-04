@@ -38,10 +38,10 @@
                 <td>{{ paper.publish_date|date }}</td>
                 <td>{{ paper.expire_date|date }}</td>
                 {% if showEssayComment == 0 %}
-                <td><a href="{% url 'student:paper_info' paper.pk %}">详情</a></td>
+                <td><a href="{% url 'student:paper_info' paper.pk %}" class="btn btn-primary btn-sm">详情</a></td>
                 {% else %}
                     {% if paper.essay_question_set.all|length != 0%}
-                        <td><a href="{% url 'student:essay_comment_pick' paper.pk %}">问答题互评</a></td>
+                        <td><a href="{% url 'student:essay_comment_pick' paper.pk %}" class="btn btn-primary btn-sm">问答题互评</a></td>
                     {% else %}
                         <td><a href="">该试卷无问答题</a></td>
                     {% endif %}

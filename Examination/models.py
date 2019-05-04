@@ -66,8 +66,8 @@ class Multiple_Choice_Question(models.Model):
 class Essay_Question(models.Model):
     paper = models.ForeignKey(Paper, on_delete=models.CASCADE, null=True)
     title = models.TextField()
-    point = models.IntegerField()
     right_answer = models.TextField()
+    point = models.IntegerField()
 
     def __str__(self):
         return self.title

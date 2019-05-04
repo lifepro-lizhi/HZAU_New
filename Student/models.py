@@ -20,7 +20,7 @@ class PaperResult(models.Model):
     paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     choice_question_result = models.IntegerField(default=0)
-    essay_question_result = models.IntegerField(default=0)
+    essay_question_result = models.FloatField(default=0)
     does_choice_question_submit = models.BooleanField(default=False)
     does_essay_question_submit = models.BooleanField(default=False)
     submit_date = models.DateField(auto_now=True)
@@ -61,12 +61,10 @@ class EssayComment(models.Model):
         for essay_answer in list(paper_answer.essayanswer_set.all()):
             score = 0
             comments_count = essay_answer.essaycomment_set.count()
-            print('comments_count: {}'.format(comments_count))
             if comments_count != 0:
                 for essay_comment in list(essay_answer.essaycomment_set.all()):
-                    print(essay_comment.score)
                     score += essay_comment.score
-                score = score / comments_count
+                score = round(score / comments_count, 2)
                 total_score += score
         
         paper_result = PaperResult.objects.filter(paper=paper_answer.paper, student=paper_answer.student).first()
@@ -75,6 +73,11 @@ class EssayComment(models.Model):
             paper_result.paper = paper_answer.paper
             paper_result.student = paper_answer.student
         
-        print('total_score: {}'.format(total_score))
         paper_result.essay_question_result = total_score
         paper_result.save()
+
+
+class PaperToComment(models.Model):
+    paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)  # student to do the comment
+    paper_answer_ids = models.CharField(max_length=100)  # format like '1,2,3,4,5'

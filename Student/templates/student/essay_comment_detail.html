@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block body_block %}
+{% load get_student_answer %}
 <div class="container">
 <br><br>
 
@@ -45,6 +46,7 @@
                         互评分数：{{ essay_comment.score }}</p>
                     <p class="card_text">{{ essay_comment.comment}}</p>
                 {% endfor %}
+                <h6 class="cart-title text-warning">平均分：{% get_essay_average_score essay_answer.essaycomment_set.all %}</h6>
             </div>
         </div>
     </div>

@@ -40,9 +40,9 @@
             <td>{{ paper.publish_date|date }}</td>
 
             {% if paper.is_published %}
-            <td><a href="{% url 'examination:paper_info' paper.pk %}">详情</a></td>
+            <td><a href="{% url 'examination:paper_info' paper.pk %}" class="btn btn-primary btn-sm">详情</a></td>
             {% else %}
-            <td><a href="{% url 'examination:paper_info' paper.pk %}">管理</a></td>
+            <td><a href="{% url 'examination:paper_info' paper.pk %}" class="btn btn-primary btn-sm">管理</a></td>
             {% endif %}
         </tr>
         {% endfor %}

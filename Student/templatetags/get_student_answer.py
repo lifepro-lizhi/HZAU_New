@@ -1,6 +1,6 @@
 from django import template
 from Examination.models import Multiple_Choice_Question
-from Student.models import PaperResult
+from Student.models import PaperResult, EssayComment
 
 register = template.Library()
 
@@ -17,16 +17,28 @@ def get_right_or_wrong(question_id, student_answers):
     question = Multiple_Choice_Question.objects.get(pk=question_id)
 
     id_str = str(question_id)
-    print("id: {}".format(id_str))
     if id_str in student_answers:
-        print("aa: {}".format(student_answers[id_str]))
-        print(question.right_answer)
         if student_answers[id_str] == question.right_answer:
             return True
         else:
             return False
     else:
         return False
+
+
+@register.simple_tag
+def get_essay_average_score(essay_comments):
+    sum_score = 0
+    avg_score = 0
+
+    for comment in essay_comments:
+        sum_score += comment.score
+    
+    if len(essay_comments) == 0:
+        return 0.0
+    else:
+        avg_score = round(sum_score / len(essay_comments), 2)
+        return avg_score
 
 
 @register.simple_tag

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from Teacher.forms import UserRegisterForm, UserLoginForm, TeacherInfoForm
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, FileResponse 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from Examination.models import Paper
@@ -10,6 +10,8 @@ from Teacher.models import Teacher
 from Student.models import PaperResult
 from Video.models import Video
 import csv
+import io
+from reportlab.pdfgen import canvas
 
 # Create your views here.
 
@@ -139,4 +141,36 @@ def export_paper_results(request, paper_id):
     return response
 
     
+@login_required
+def export_paper_to_pdf(request, paper_id):
+    paper = Paper.objects.get(pk=paper_id)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="mypdf.pdf"'
+
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer)
+
+    # Start writing the PDF here
+    # p.drawCentredString(1, 1, paper.title)
+    p.drawString(100, 100, paper.title)
+    
+    # End writing
+
+    p.showPage()
+    p.save()
+
+    pdf = buffer.getvalue()
+    buffer.close()
+    response.write(pdf)
+
+    # return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+    return response
+
+
+@login_required
+def teacher_personal_info(request):
+    teacher = Teacher.objects.get(user=request.user)
+    context = {'teacher': teacher}
+    return render(request, 'teacher/teacher_personal_info.html', context=context)
 

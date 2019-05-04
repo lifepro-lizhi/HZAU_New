@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from Student.forms import UserLoginForm, UserRegisterForm, StudentInfoForm
 from Examination.models import Paper, Multiple_Choice_Question, Essay_Question
-from Student.models import Student, PaperResult, EssayAnswer, PaperAnswer, EssayComment
+from Student.models import Student, PaperResult, EssayAnswer, PaperAnswer, EssayComment, PaperToComment
 from GradeClass.models import GradeClass
 from Video.models import Video
 from datetime import date
@@ -292,70 +292,94 @@ def essay_comment_pick(request, paper_id):
 @login_required
 def pick_random_paper(request, paper_id):
     paper = Paper.objects.get(pk=paper_id)
+    current_student = Student.objects.get(user=request.user)
     paper_commits_count = len(paper.paperanswer_set.all())
     paper_answers_to_add_comment = []
     paper_answer_ids = []
     already_picked_index = []
 
-    if paper_commits_count >= 5:
-        while len(paper_answers_to_add_comment) < 5:    # one student should do at least 5 comments
-            r = random.randint(0, paper_commits_count - 1)    # random pick a index
-            if r not in already_picked_index:    # insure the current index has not been selected 
-                paper_answer = paper.paperanswer_set.order_by('id')[r]    # get the paper_answer at the specified index
+    paper_to_comment = PaperToComment.objects.filter(paper=paper, student=current_student).first()
+    if paper_to_comment == None:
+        if paper_commits_count >= 5:
+            while len(paper_answers_to_add_comment) < 5:    # one student should do at least 5 comments
+                r = random.randint(0, paper_commits_count - 1)    # random pick a index
+                if r not in already_picked_index:    # insure the current index has not been selected 
+                    paper_answer = paper.paperanswer_set.order_by('id')[r]    # get the paper_answer at the specified index
 
-                current_student = Student.objects.get(user=request.user)
-                if current_student != paper_answer.student:    # can not comment himself's paper
-                    if paper_answer.comments_count < 5:    # insure the paper_answer's comments' count is less than 5
-                        paper_answers_to_add_comment.append(paper_answer)
-                        paper_answer_ids.append(paper_answer.pk)
+                    if current_student != paper_answer.student:    # can not comment himself's paper
+                        if paper_answer.comments_count < 5:    # insure the paper_answer's comments' count is less than 5
+                            paper_answers_to_add_comment.append(paper_answer)
+                            paper_answer_ids.append(paper_answer.pk)
+
+                            already_picked_index.append(r)
+                        else:
+                            continue
                     else:
                         continue
                 else:
                     continue
-            else:
-                continue
 
-        request.session['paper_answer_ids'] = paper_answer_ids
+            paper_to_comment = PaperToComment()
+            paper_to_comment.paper = paper
+            paper_to_comment.student = current_student
+            paper_to_comment.paper_answer_ids = ",".join(str(item) for item in paper_answer_ids)
+            paper_to_comment.already_done_comment = '0,0,0,0,0'
+            paper_to_comment.save()
 
-        context = {'paper': paper,
-                'paper_answers': paper_answers_to_add_comment}
-        return render(request, 'student/do_comment_paper_list.html', context=context)
+            context = {'paper': paper,
+                    'paper_answers': paper_answers_to_add_comment}
+            return render(request, 'student/do_comment_paper_list.html', context=context)
+        else:
+            messages.warning(request, '答题人数不足，无法分配试卷！') 
+            return HttpResponseRedirect(reverse('student:essay_comment_pick', args=[paper.pk]))
     else:
-        messages.warning(request, '答题人数不足，无法分配试卷！') 
-        return HttpResponseRedirect(reverse('student:essay_comment_pick', args=[paper.pk]))
+        ids_str = paper_to_comment.paper_answer_ids.split(',')
+        for item in ids_str:
+            paper_answer = paper.paperanswer_set.get(pk=int(item))
+            paper_answers_to_add_comment.append(paper_answer)
+        
+        context = {'paper': paper,
+                    'paper_answers': paper_answers_to_add_comment}
+        return render(request, 'student/do_comment_paper_list.html', context=context)
 
 
 @login_required
 def do_comment(request, paper_answer_id):
     paper_answer = PaperAnswer.objects.get(pk=paper_answer_id)
+    paper = paper_answer.paper
     student = Student.objects.get(user=request.user)
 
     if request.method == 'POST':
         for key in request.POST.keys():
             if 'essay_comment' in key:
+                print('111')
                 essay_answer_id = int(key[key.find('.') + 1 :])
                 essay_answer = EssayAnswer.objects.get(pk=essay_answer_id)
 
                 essay_comment = EssayComment.objects.filter(essay_answer=essay_answer, student=student).first()
                 if essay_comment == None:
+                    print('222')
                     essay_comment = EssayComment()
                     essay_comment.essay_answer = essay_answer
                     essay_comment.student = student
                 
                 if 'essay_comment_comment' in key:
+                    print('333')
                     comment = request.POST[key]
                     essay_comment.comment = comment
 
                 if 'essay_comment_score' in key:
+                    print('444')
                     score = request.POST[key]
                     essay_comment.score = score
                 
                 essay_comment.save()
         
         paper_answers_to_add_comment = []
-        paper_answer_ids = request.session['paper_answer_ids']
-        for paper_answer_id in paper_answer_ids:
-            paper_answer = PaperAnswer.objects.get(pk=paper_answer_id)
+        paper_to_comment = PaperToComment.objects.get(paper=paper, student=student)
+        ids_str = paper_to_comment.paper_answer_ids.split(',')
+        for item in ids_str:
+            paper_answer = paper.paperanswer_set.get(pk=int(item))
             paper_answers_to_add_comment.append(paper_answer)
         
         paper = Paper.objects.get(pk=paper_answers_to_add_comment[0].paper.id)
@@ -396,4 +420,11 @@ def essay_comment_detail(request, result_id):
 
     return render(request, 'student/essay_comment_detail.html', context=context)
     
+
+@login_required
+def student_personal_info(request):
+    student = Student.objects.get(user=request.user)
+    context = {'student': student}
+    return render(request, 'student/student_personal_info.html', context=context)
+
 
