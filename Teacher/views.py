@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from Teacher.forms import UserRegisterForm, UserLoginForm, TeacherInfoForm
 from django.contrib.auth.decorators import login_required
@@ -77,6 +77,7 @@ def teacher_login(request):
                 login(request, user)
                 # messages.success(request, '登录成功！')
                 return HttpResponseRedirect(reverse('teacher:index'))
+                # return redirect('http://144.202.122.52/unity_index.html')
             else:
                 messages.warning(request, '用户不处于活跃状态')
                 return HttpResponseRedirect(reverse('basic:index'))

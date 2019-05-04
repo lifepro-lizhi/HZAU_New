@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
@@ -85,7 +85,8 @@ def student_login(request):
             if user.is_active:
                 login(request, user)
                 # messages.success(request, '登录成功！')
-                return HttpResponseRedirect(reverse('student:index'))
+                # return HttpResponseRedirect(reverse('student:index'))
+                return redirect('http://144.202.122.52/unity_index.html')
             else:
                 messages.warning(request, '用户不处于活跃状态')
                 return HttpResponseRedirect(reverse('basic:index'))
