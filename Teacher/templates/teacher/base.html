@@ -16,6 +16,7 @@
          <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"> -->
          <!-- Our Custom CSS -->
          <link rel="stylesheet" href="{% static 'basic/css/sidebar.css' %}">
+         <link rel="stylesheet" href="{% static 'basic/css/hover.css' %}" media="all">
      </head>
  
      <body>
@@ -33,7 +34,7 @@
                  <li class="">
                      <a href="#ExaminationSubmenu" data-toggle="collapse" aria-expanded="false">题库</a>
                      <ul class="collapse list-unstyled" id="ExaminationSubmenu">
-                         <li><a href="{% url 'examination:create_paper' %}">创建试卷</a></li>
+                         <li><a href="{% url 'examination:create_paper' %}" class="hvr-fade">创建试卷</a></li>
                          <li><a href="{% url 'examination:paper_list' %}">浏览试卷</a></li>
                      </ul>
                  </li>

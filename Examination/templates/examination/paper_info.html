@@ -12,17 +12,17 @@
  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav navbar-right">
         {% if paper.is_published %}
-        <li><a href="{% url 'examination:paper_preview' paper.pk %}">试卷预览</a></li>
-        <li><a href="{% url 'examination:paper_results' paper.pk%}">成绩统计</a></li>
-        <li><a href="{% url 'examination:delete_paper' paper.pk %}">删除试卷</a></li>
-        <li><a href="{% url 'examination:paper_list' %}">返回列表</a></li>
+        <li><a href="{% url 'examination:paper_preview' paper.pk %}" class="hvr-bounce-to-top">试卷预览</a></li>
+        <li><a href="{% url 'examination:paper_results' paper.pk%}" class="hvr-bounce-to-top">成绩统计</a></li>
+        <li><a href="{% url 'examination:delete_paper' paper.pk %}" class="hvr-bounce-to-top">删除试卷</a></li>
+        <li><a href="{% url 'examination:paper_list' %}" class="hvr-bounce-to-top">返回列表</a></li>
         {% else %}
-        <li><a href="{% url 'examination:create_multiple_choice_question' paper.pk %}">添加选择题</a></li>
-        <li><a href="{% url 'examination:create_essay_question' paper.pk%}">添加问答题</a></li>
-        <li><a href="{% url 'examination:paper_preview' paper.pk %}">试卷预览</a></li>
-        <li><a href="{% url 'examination:publish_paper' paper.pk %}">发布试卷</a></li>
-        <li><a href="{% url 'examination:delete_paper' paper.pk %}">删除试卷</a></li>
-        <li><a href="{% url 'examination:paper_list' %}">返回列表</a></li>
+        <li><a href="{% url 'examination:create_multiple_choice_question' paper.pk %}" class="hvr-bounce-to-top">添加选择题</a></li>
+        <li><a href="{% url 'examination:create_essay_question' paper.pk%}" class="hvr-bounce-to-top">添加问答题</a></li>
+        <li><a href="{% url 'examination:paper_preview' paper.pk %}" class="hvr-bounce-to-top">试卷预览</a></li>
+        <li><a href="{% url 'examination:publish_paper' paper.pk %}" class="hvr-bounce-to-top">发布试卷</a></li>
+        <li><a href="{% url 'examination:delete_paper' paper.pk %}" class="hvr-bounce-to-top">删除试卷</a></li>
+        <li><a href="{% url 'examination:paper_list' %}" class="hvr-bounce-to-top">返回列表</a></li>
         {% endif %}
     </ul>
 </div>

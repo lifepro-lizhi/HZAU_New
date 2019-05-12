@@ -11,9 +11,9 @@
 {% block navbar_block %}
  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav navbar-right">
-        <li><a href="{% url 'examination:create_multiple_choice_question' paper.pk %}">添加选择题</a></li>
-        <li><a href="{% url 'examination:create_essay_question' paper.pk%}">添加问答题</a></li>
-        <li><a href="{% url 'examination:paper_info' paper.pk%}">返回</a></li>
+        <li><a href="{% url 'examination:create_multiple_choice_question' paper.pk %}" class="hvr-bounce-to-top">添加选择题</a></li>
+        <li><a href="{% url 'examination:create_essay_question' paper.pk%}" class="hvr-bounce-to-top">添加问答题</a></li>
+        <li><a href="{% url 'examination:paper_info' paper.pk%}" class="hvr-bounce-to-top">返回</a></li>
     </ul>
 </div>
 {% endblock %}
