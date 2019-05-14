@@ -44,7 +44,8 @@ def register(request):
             registered = True
 
             messages.success(request, '注册成功！请返回重新登录')
-            return render(request, 'basic/index.html')
+            return HttpResponseRedirect(reverse('teacher:login'))
+            # return render(request, 'teacher/login.html')
         else:
             errors = user_form.errors.as_data()
             for key in errors.keys():
@@ -91,7 +92,7 @@ def teacher_login(request):
 @login_required
 def teacher_logout(request):
     logout(request)
-    return HttpResponseRedirect(reverse('basic:index'))
+    return HttpResponseRedirect(reverse('teacher:login'))
 
 
 @login_required
