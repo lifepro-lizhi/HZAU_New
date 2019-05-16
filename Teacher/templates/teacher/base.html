@@ -39,10 +39,11 @@
                      </ul>
                  </li>
                  <li>
-                     <a href="#VideoSubmenu" data-toggle="collapse" aria-expanded="false">视频</a>
+                     <a href="#VideoSubmenu" data-toggle="collapse" aria-expanded="false">媒体库</a>
                      <ul class="collapse list-unstyled" id="VideoSubmenu">
                          <li><a href="{% url 'video:upload_video' %}">上传视频</a></li>
-                         <li><a href="{% url 'video:video_list' %}">浏览视频</a></li>
+                         <li><a href="{% url 'video:upload_image' %}">上传图片</a></li>
+                         <li><a href="{% url 'video:media_list' %}">浏览媒体库</a></li>
                      </ul>
                  </li>
                  <li>

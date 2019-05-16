@@ -20,3 +20,10 @@ class Video(models.Model):
     upload_date = models.DateField(auto_now=True)
     video = models.FileField(upload_to=user_directory_path)
 
+
+class Image(models.Model):
+    title = models.CharField(max_length=255)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    upload_date = models.DateField(auto_now=True)
+    image = models.ImageField(upload_to=user_directory_path)
+

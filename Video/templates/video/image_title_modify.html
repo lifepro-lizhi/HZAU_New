@@ -1,0 +1,35 @@
+{% extends "teacher/base.html" %}
+
+{% block head_title_block %}
+管理图片
+{% endblock %}
+
+{% block title_block %}
+<h3>管理图片</h3>
+{% endblock %}
+
+{% block navbar_block %}
+ <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="{% url 'video:image_manage' image.pk %}" class="hvr-bounce-to-top">返回</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block content_block%}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <form action="{% url 'video:image_title_modify' image.pk %}" method="POST">
+                {% csrf_token %}
+                <label>原图片标题：{{ image.title }}</label><br><br>
+                <label for="title">图片标题：</label>
+                <input type="text" name="title"><br><br>
+                <input type="submit" class='btn btn-primary' value="确定修改">
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

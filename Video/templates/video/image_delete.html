@@ -1,0 +1,31 @@
+{% extends "teacher/base.html" %}
+
+{% block head_title_block %}
+删除图片
+{% endblock %}
+
+{% block title_block %}
+<h3>删除图片</h3>
+{% endblock %}
+
+{% block navbar_block %}
+ <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="{% url 'video:image_manage' image.pk %}" class="hvr-bounce-to-top">返回</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block content_block%}
+<div class="container">
+    <divc class="row">
+    <ul class="list-group col-md-6 col-md-offset-3">
+        <h3>确定删除视频 “{{ image.title }}”？</h3>
+        <form action="{% url 'video:image_delete' image.pk %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="确定" class="btn btn-danger">
+            <a href="{% url 'video:image_manage' image.pk %}" class="btn btn-primary">返回</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
