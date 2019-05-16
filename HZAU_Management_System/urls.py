@@ -26,6 +26,7 @@ urlpatterns = [
     path('teacher/', include('Teacher.urls')),
     path('student/', include('Student.urls')),
     path('video/', include('Video.urls')),
+    path('user_selection/', include('Basic.urls')),
 ]
 
 if settings.DEBUG is True:

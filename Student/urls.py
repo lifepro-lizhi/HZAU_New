@@ -12,6 +12,7 @@ urlpatterns = [
     path('logout', views.student_logout, name='logout'),
     path('paper_list/<int:showEssayComment>', views.paper_list, name='paper_list'),
     path('video_list', views.video_list, name='video_list'),
+    path('image_list', views.image_list, name='image_list'),
     path('paper_info/<int:paper_id>', views.paper_info, name='paper_info'),
     path('paper_results', views.paper_results, name='paper_results'),
     path('do_paper_type_choose/<int:paper_id>', views.do_paper_type_choose, name='do_paper_type_choose'),

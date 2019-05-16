@@ -1,0 +1,39 @@
+{% extends "student/base.html" %}
+
+{% block head_title_block %}
+图片列表
+{% endblock %}
+
+{% block title_block %}
+<h3>图片列表</h3>
+{% endblock %}
+
+{% block content_block%}
+
+<div class="container">
+    <h3>已发布图片</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">图片标题</th>
+                <th scope="col">发布人</th>
+                <th scope="col">发布日期</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for image in images %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ image.title }}</td>
+                    <td>{{ image.teacher.name }}</td>
+                    <td>{{ image.upload_date|date }}</td>
+                    <td><a href="{% url 'video:image_play' image.pk %}">阅览</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

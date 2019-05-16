@@ -8,7 +8,7 @@ from Student.forms import UserLoginForm, UserRegisterForm, StudentInfoForm
 from Examination.models import Paper, Multiple_Choice_Question, Essay_Question
 from Student.models import Student, PaperResult, EssayAnswer, PaperAnswer, EssayComment, PaperToComment
 from GradeClass.models import GradeClass
-from Video.models import Video
+from Video.models import Video, Image
 from datetime import date
 import random
 
@@ -86,9 +86,9 @@ def student_login(request):
             if user.is_active:
                 login(request, user)
                 # messages.success(request, '登录成功！')
-                # return HttpResponseRedirect(reverse('student:index'))
+                return HttpResponseRedirect(reverse('student:index'))
                 # return redirect('http://144.202.122.52/unity_index.html')
-                return redirect('http://47.111.185.160/unity_index.html')
+                # return redirect('http://47.111.185.160/unity_index.html')
             else:
                 messages.warning(request, '用户不处于活跃状态')
                 return HttpResponseRedirect(reverse('student:login'))
@@ -282,6 +282,14 @@ def video_list(request):
     context = {'videos': videos}
 
     return render(request, 'student/video_list.html', context=context)
+
+
+@login_required
+def image_list(request):
+    images = Image.objects.all()
+    context = {'images': images}
+
+    return render(request, 'student/image_list.html', context=context)
 
 
 @login_required
