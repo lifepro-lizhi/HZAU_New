@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script type="text/css">
-            .center {
-                margin: 0 auto; 
-                width: 400px;
-            }
-        </script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     </head>
     <body>
-        <img src="{{ url }}" alt="">
+        <br>
+        {% if is_teacher == True %}
+            <a href="{% url 'video:media_list' %}" class="btn btn-primary ml-3">返回</a>
+        {% else %}
+            <a href="{% url 'student:image_list' %}" class="btn btn-primary ml-3">返回</a>
+        {% endif %}
+        <br><br>
+
+        <img src="{{ url }}" alt="" class="rounded mx-auto d-block">
     </body>
 </html>

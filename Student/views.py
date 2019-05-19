@@ -28,13 +28,33 @@ def register(request):
         student_info_form = StudentInfoForm(data=request.POST)
 
         if user_form.is_valid() and student_info_form.is_valid():
+            student_id = request.POST['student_id']
+            student_with_same_id = Student.objects.all().filter(student_id=student_id).first()
+            if student_with_same_id != None:
+                messages.warning(request, '存在相同学号的注册学生！请返回重新注册')
+                user_form = UserRegisterForm()
+                student_info_form = StudentInfoForm()
+                grade_class = GradeClass.objects.all()
+                context = {'user_form': user_form,
+                   'student_info_form': student_info_form,
+                   'grade_class': grade_class,
+                   'registered': registered}
+                return render(request, 'student/register.html', context=context)
+
             if request.POST['password'] == request.POST['confirm_password']:
                 user = user_form.save()
                 user.set_password(user.password)
                 user.save()
             else:
                 messages.warning(request, '两次密码输入不匹配，请重新输入！')
-                return render(request, 'student/register.html')
+                user_form = UserRegisterForm()
+                student_info_form = StudentInfoForm()
+                grade_class = GradeClass.objects.all()
+                context = {'user_form': user_form,
+                   'student_info_form': student_info_form,
+                   'grade_class': grade_class,
+                   'registered': registered}
+                return render(request, 'student/register.html', context=context)
 
             student_info = student_info_form.save(commit=False)
             student_info.user = user

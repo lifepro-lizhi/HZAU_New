@@ -8,8 +8,8 @@ from datetime import date, timedelta
 class Paper(models.Model):
     title = models.CharField(max_length=1000)
     description = models.TextField()
-    multiple_choice_question_total_score = models.IntegerField(default=0)
-    essay_question_total_score = models.IntegerField(default=0)
+    multiple_choice_question_total_score = models.FloatField(default=0)
+    essay_question_total_score = models.FloatField(default=0)
     publish_date = models.DateField(auto_now=True)
     expire_date = models.DateField(default=date.today() + timedelta(days=30))  # default expire date is 30 days from now on
     is_published = models.BooleanField(default=False)
@@ -42,7 +42,7 @@ class Multiple_Choice_Question(models.Model):
     option_B = models.CharField(max_length=1000)
     option_C = models.CharField(max_length=1000)
     option_D = models.CharField(max_length=1000)
-    point = models.IntegerField()
+    point = models.FloatField()
 
     OPTIONS = (
         ('A', 'A'),
@@ -67,7 +67,7 @@ class Essay_Question(models.Model):
     paper = models.ForeignKey(Paper, on_delete=models.CASCADE, null=True)
     title = models.TextField()
     right_answer = models.TextField()
-    point = models.IntegerField()
+    point = models.FloatField()
 
     def __str__(self):
         return self.title

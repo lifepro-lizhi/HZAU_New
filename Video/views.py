@@ -24,7 +24,7 @@ def upload_video(request):
 
             os.chmod(video_instance.video.path, stat.S_IRWXO | stat.S_IRWXU | stat.S_IRWXG)
 
-            return render(request, 'teacher/index.html')
+            return HttpResponseRedirect(reverse('video:media_list'))
     else:
         form = VideoForm()
         context = {'form': form}
@@ -43,7 +43,7 @@ def upload_image(request):
 
             os.chmod(image_instance.image.path, stat.S_IRWXO | stat.S_IRWXU | stat.S_IRWXG)
 
-            return render(request, 'teacher/index.html')
+            return HttpResponseRedirect(reverse('video:media_list'))
     else:
         form = ImageForm()
         context = {'form': form}
@@ -63,14 +63,32 @@ def media_list(request):
 def video_play(request, video_id):
     video = Video.objects.get(pk=video_id)
     url = video.video.url
-    context = {'url': url}
+    
+    is_teacher = False
+    teacher = Teacher.objects.all().filter(user=request.user).first()
+    if teacher != None:
+        is_teacher = True
+    else:
+        is_teacher = False
+
+    context = {'url': url,
+               'is_teacher': is_teacher}
     return render(request, 'video/video_play.html', context=context)
 
 @login_required
 def image_play(request, image_id):
     image = Image.objects.get(pk=image_id)
     url = image.image.url
-    context = {'url': url}
+
+    is_teacher = False
+    teacher = Teacher.objects.all().filter(user=request.user).first()
+    if teacher != None:
+        is_teacher = True
+    else:
+        is_teacher = False;
+
+    context = {'url': url,
+               'is_teacher': is_teacher}
     return render(request, 'video/image_play.html', context=context)
 
 
@@ -131,7 +149,7 @@ def video_delete(request, video_id):
             video.delete()
 
         messages.success(request, '视频删除成功！')
-        return HttpResponseRedirect(reverse('video:video_list'))
+        return HttpResponseRedirect(reverse('video:media_list'))
     else:
         context = {'video': video}
         return render(request, 'video/video_delete.html', context=context)

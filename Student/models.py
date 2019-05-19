@@ -19,7 +19,7 @@ class Student(models.Model):
 class PaperResult(models.Model):
     paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    choice_question_result = models.IntegerField(default=0)
+    choice_question_result = models.FloatField(default=0)
     essay_question_result = models.FloatField(default=0)
     does_choice_question_submit = models.BooleanField(default=False)
     does_essay_question_submit = models.BooleanField(default=False)
