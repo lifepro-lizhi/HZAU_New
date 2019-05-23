@@ -11,6 +11,9 @@ def index(request):
 
 
 def user_selection(request):
+    if request.user.is_anonymous:
+        return HttpResponseRedirect(reverse('student:login'))
+
     student = Student.objects.all().filter(user=request.user).first()
     if student != None:
         return HttpResponseRedirect(reverse('student:index'))
