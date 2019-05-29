@@ -12,7 +12,7 @@ def index(request):
 
 def user_selection(request):
     if request.user.is_anonymous:
-        return HttpResponseRedirect(reverse('student:login'))
+        return HttpResponseRedirect(reverse('basic:user_login'))
 
     student = Student.objects.all().filter(user=request.user).first()
     if student != None:
@@ -22,6 +22,10 @@ def user_selection(request):
         if teacher != None:
             return HttpResponseRedirect(reverse('teacher:index'))
         else:
-            return HttpResponseRedirect(reverse('student:login'))
+            return HttpResponseRedirect(reverse('basic:user_login'))
+
+
+def user_login(request):
+    return render(request, 'student/login.html')
 
 

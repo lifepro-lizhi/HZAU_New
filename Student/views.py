@@ -69,7 +69,7 @@ def register(request):
             registered = True
 
             messages.success(request, '注册成功！请返回重新登录')
-            return HttpResponseRedirect(reverse('student:login'))
+            return HttpResponseRedirect(reverse('basic:user_login'))
             # return render(request, 'student/login.html')
         else:
             errors = user_form.errors.as_data()
@@ -108,13 +108,13 @@ def student_login(request):
                 # messages.success(request, '登录成功！')
                 # return HttpResponseRedirect(reverse('student:index'))
                 # return redirect('http://144.202.122.52/unity_index.html')
-                return redirect('http://47.111.185.160/unity_index.html')
+                return redirect('http://47.111.185.160/insect/unity_index.html')
             else:
                 messages.warning(request, '用户不处于活跃状态')
-                return HttpResponseRedirect(reverse('student:login'))
+                return HttpResponseRedirect(reverse('basic:user_login'))
         else:
             messages.warning(request, '用户名或密码错误！')
-            return HttpResponseRedirect(reverse('student:login'))
+            return HttpResponseRedirect(reverse('basic:user_login'))
     else:
         return render(request, 'student/login.html')
 
@@ -122,7 +122,7 @@ def student_login(request):
 @login_required
 def student_logout(request):
     logout(request)
-    return HttpResponseRedirect(reverse('student:login'))
+    return HttpResponseRedirect(reverse('basic:user_login'))
 
 
 @login_required

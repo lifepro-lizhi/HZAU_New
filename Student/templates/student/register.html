@@ -14,7 +14,7 @@
 <style>
     body 
     {
-        background-image: url("{% static 'basic/image/background.jpg' %}");
+        background-image: url("{% static 'basic/image/background.png' %}");
         background-repeat:no-repeat;
         background-size:cover;
     }
@@ -23,7 +23,7 @@
 
 {% block body_block%}
 <div class="col" style="width: 18rem;">
-    <img src="{% static 'basic/image/logo.jpg' %}" class="img-thumbnail rounded" width="100" alt="logo"><br><br>
+    <!-- <img src="{% static 'basic/image/logo.jpg' %}" class="img-thumbnail rounded" width="100" alt="logo"><br><br> -->
     <h3>学生注册页面</h3>
     <form class="form-group col-md-3 mx-auto" method="POST" action="{% url 'student:register' %}">
         {% csrf_token %}
@@ -40,7 +40,7 @@
           </select>
           <br>
         <button class="btn btn-primary btn-block" type="submit">注册</button>
-        <a class="btn btn-primary btn-block" href="{% url 'student:login' %}" role="button">返回</a>
+        <a class="btn btn-primary btn-block" href="{% url 'basic:user_login' %}" role="button">返回</a>
     </form>
     <p class="mt-5 mb-3 text-muted">&copy; 华中农业大学 2019</p>
 </div>
