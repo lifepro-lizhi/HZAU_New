@@ -9,6 +9,7 @@ from Examination.models import Paper, Multiple_Choice_Question, Essay_Question
 from Student.models import Student, PaperResult, EssayAnswer, PaperAnswer, EssayComment, PaperToComment
 from GradeClass.models import GradeClass
 from Video.models import Video, Image
+from Teacher.models import Teacher
 from datetime import date
 import random
 
@@ -103,6 +104,12 @@ def student_login(request):
 
         user = authenticate(username=username, password=password)
         if user:
+            try:
+                student = Student.objects.get(user=user)
+            except Student.DoesNotExist:
+                messages.warning(request, '用户名或密码错误！')
+                return HttpResponseRedirect(reverse('basic:user_login'))
+
             if user.is_active:
                 login(request, user)
                 # messages.success(request, '登录成功！')

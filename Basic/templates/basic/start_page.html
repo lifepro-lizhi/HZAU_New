@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+        <title>
+        </title>
+
+        <style>
+            .container {
+            position: relative;
+            width: 70%;
+            z-index: 1;
+            }
+
+            /* Make the image responsive */
+            .container img {
+            width: 100%;
+            height: auto;
+            z-index: 2;
+            }
+
+            /* Style the button and place it in the middle of the container/image */
+            .container .btn1{
+            position: absolute;
+            padding: 12px 24px;
+            cursor: pointer; 
+            border-radius: 5px; 
+            top: 55%;
+            left:50%;
+            transform: translate(-50%, -50%); 
+            -ms-transform: translate(-50%, -50%);
+            z-index: 3;
+            }
+
+            .container .btn2{
+            position: absolute;
+            padding: 12px 24px;
+            cursor: pointer; 
+            border-radius: 5px; 
+            top: 65%;
+            left:50%;
+            transform: translate(-50%, -50%); 
+            -ms-transform: translate(-50%, -50%);
+            z-index: 3;
+            }
+
+        </style>
+    </head>
+
+    <body class="text-center">
+        <div class="container">
+            <img src="{% static 'basic/image/start_page.png' %}" class="img">
+            <a class="btn1" href="http://47.111.185.160/index/login"><img src="{% static 'basic/image/login1.png' %}"></a>
+            <a class="btn2" href="http://47.111.185.160/index/login"><img src="{% static 'basic/image/register1.png' %}"></a>
+
+        </div>
+    </body>
+</html>

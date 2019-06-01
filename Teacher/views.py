@@ -72,7 +72,7 @@ def teacher_login(request):
                 teacher = Teacher.objects.get(user=user)
             except Teacher.DoesNotExist:
                 messages.warning(request, '用户名或密码错误！')
-                return HttpResponseRedirect(reverse('teacher:login'))
+                return HttpResponseRedirect(reverse('basic:user_login'))
 
             if user.is_active:
                 login(request, user)
@@ -81,10 +81,10 @@ def teacher_login(request):
                 # return redirect('http://144.202.122.52/unity_index.html')
             else:
                 messages.warning(request, '用户不处于活跃状态')
-                return HttpResponseRedirect(reverse('teacher:login'))
+                return HttpResponseRedirect(reverse('basic:user_login'))
         else:
             messages.warning(request, '用户名或密码错误！')
-            return HttpResponseRedirect(reverse('teacher:login'))
+            return HttpResponseRedirect(reverse('basic:user_login'))
     else:
         return render(request, 'teacher/login.html')
 

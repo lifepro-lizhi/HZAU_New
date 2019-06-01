@@ -29,3 +29,7 @@ def user_login(request):
     return render(request, 'student/login.html')
 
 
+def start(request):
+    return render(request, 'basic/start_page.html')
+
+
