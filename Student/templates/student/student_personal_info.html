@@ -17,15 +17,21 @@
 
 {% block content_block%}
 <div class="container">
-    <divc class="row">
-    <ul class="list-group col-md-6 col-md-offset-3">
-        <li class="list-group-item" style="white-space:pre;">学生姓名：               {{ student.name }}</li>
-        <li class="list-group-item" style="white-space:pre;">班级：                       {{ student.grade_class }}</li>
-        <li class="list-group-item" style="white-space:pre;">上次登录时间：       {{ user.last_login }}</li>
+    <div>
+        <ul class="list-group col-md-6 col-md-offset-3">
+            <li class="list-group-item" style="white-space:pre;">学生姓名：               {{ student.name }}</li>
+            <li class="list-group-item" style="white-space:pre;">学号：                       {{ student.student_id }}</li>
+            <li class="list-group-item" style="white-space:pre;">专业班级：               {{ student.grade_class }}</li>
+            <li class="list-group-item" style="white-space:pre;">邮箱：                       {{ student.user.email }}</li>
+            <li class="list-group-item" style="white-space:pre;">电话：                       {{ student.phone }}</li>
+            <li class="list-group-item" style="white-space:pre;">上次登录时间：       {{ user.last_login }}</li>
+            <br>
+            <div class="col-md-offset-4">
+                <a class="btn btn-primary" href="{% url 'student:modify_personal_info' %}">修改个人信息</a>
+                <a class="btn btn-warning" href="{% url 'student:reset_password' %}">重置密码</a>
+            </div>
+        </ul>
         <br>
-        
-    </ul>
-
     </div>
 </div>
 {% endblock %}

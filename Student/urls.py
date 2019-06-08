@@ -24,4 +24,6 @@ urlpatterns = [
     path('completed_papers', views.completed_papers, name='completed_papers'),
     path('essay_comment_detail/<int:result_id>', views.essay_comment_detail, name='essay_comment_detail'),
     path('student_personal_info', views.student_personal_info, name='student_personal_info'),
+    path('modify_personal_info', views.modify_personal_info, name='modify_personal_info'),
+    path('reset_password', views.reset_password, name='reset_password'),
 ]

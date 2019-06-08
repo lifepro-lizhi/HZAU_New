@@ -17,11 +17,17 @@
 
 {% block content_block%}
 <div class="container">
-    <divc class="row">
+    <div class="row">
     <ul class="list-group col-md-6 col-md-offset-3">
         <li class="list-group-item" style="white-space:pre;">教师姓名：               {{ teacher.name }}</li>
+        <li class="list-group-item" style="white-space:pre;">电话：                       {{ teacher.phone }}</li>
+        <li class="list-group-item" style="white-space:pre;">邮箱：                       {{ teacher.user.email }}</li>
         <li class="list-group-item" style="white-space:pre;">上次登录时间：       {{ user.last_login }}</li>
         <br>
+        <div class="col-md-offset-4">
+            <a class="btn btn-primary" href="{% url 'teacher:modify_personal_info' %}">修改个人信息</a>
+            <a class="btn btn-warning" href="{% url 'teacher:reset_password' %}">重置密码</a>
+        </div>
         
     </ul>
 

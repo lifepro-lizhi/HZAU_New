@@ -18,28 +18,21 @@ import random
 @login_required
 def index(request):
     return render(request, 'student/index.html')
-    # return render(request, 'basic/sidebar_base.html')
 
 
 def register(request):
-    registered = False
+    grade_class = GradeClass.objects.all()
 
     if request.method == 'POST':
         user_form = UserRegisterForm(data=request.POST)
         student_info_form = StudentInfoForm(data=request.POST)
-
+        
         if user_form.is_valid() and student_info_form.is_valid():
             student_id = request.POST['student_id']
             student_with_same_id = Student.objects.all().filter(student_id=student_id).first()
             if student_with_same_id != None:
                 messages.warning(request, '存在相同学号的注册学生！请返回重新注册')
-                user_form = UserRegisterForm()
-                student_info_form = StudentInfoForm()
-                grade_class = GradeClass.objects.all()
-                context = {'user_form': user_form,
-                   'student_info_form': student_info_form,
-                   'grade_class': grade_class,
-                   'registered': registered}
+                context = {'grade_class': grade_class}
                 return render(request, 'student/register.html', context=context)
 
             if request.POST['password'] == request.POST['confirm_password']:
@@ -48,52 +41,32 @@ def register(request):
                 user.save()
             else:
                 messages.warning(request, '两次密码输入不匹配，请重新输入！')
-                user_form = UserRegisterForm()
-                student_info_form = StudentInfoForm()
-                grade_class = GradeClass.objects.all()
-                context = {'user_form': user_form,
-                   'student_info_form': student_info_form,
-                   'grade_class': grade_class,
-                   'registered': registered}
+                context = {'grade_class': grade_class}
                 return render(request, 'student/register.html', context=context)
 
             student_info = student_info_form.save(commit=False)
             student_info.user = user
             student_info.name = request.POST['name']
             student_info.student_id = request.POST['student_id']
+            student_info.gender = request.POST['gender']
+            student_info.phone = request.POST['phone']
 
             grade_class_pk = request.POST['grade_class']
             grade_class = GradeClass.objects.get(pk=grade_class_pk)
             student_info.grade_class = grade_class
             student_info.save()
 
-            registered = True
-
             messages.success(request, '注册成功！请返回重新登录')
             return HttpResponseRedirect(reverse('basic:user_login'))
-            # return render(request, 'student/login.html')
         else:
             errors = user_form.errors.as_data()
             for key in errors.keys():
                 messages.warning(request, errors[key])
 
-            user_form = UserRegisterForm()
-            student_info_form = StudentInfoForm()
-            grade_class = GradeClass.objects.all()
-            context = {'user_form': user_form,
-                   'student_info_form': student_info_form,
-                   'grade_class': grade_class,
-                   'registered': registered}
+            context = {'grade_class': grade_class}
             return render(request, 'student/register.html', context=context)
     else:
-        user_form = UserRegisterForm()
-        student_info_form = StudentInfoForm()
-        grade_class = GradeClass.objects.all()
-
-        context = {'user_form': user_form,
-                   'student_info_form': student_info_form,
-                   'grade_class': grade_class,
-                   'registered': registered}
+        context = {'grade_class': grade_class}
         return render(request, 'student/register.html', context=context)
 
 
@@ -465,4 +438,58 @@ def student_personal_info(request):
     context = {'student': student}
     return render(request, 'student/student_personal_info.html', context=context)
 
+
+@login_required
+def modify_personal_info(request):
+    student = Student.objects.get(user=request.user)
+    if request.method == 'POST':
+        student_info_form = StudentInfoForm(data=request.POST)
+        
+        if student_info_form.is_valid():
+            student_id = request.POST['student_id']
+            student_with_same_id = Student.objects.all().filter(student_id=student_id).first()
+            if student_with_same_id != None and student_with_same_id != student:
+                messages.warning(request, '存在相同学号的注册学生！请返回重新修改')
+                return HttpResponseRedirect(reverse('student:modify_personal_info'))
+
+            student.user.email = request.POST['email']
+            student.name = request.POST['name']
+            student.student_id = request.POST['student_id']
+            student.gender = request.POST['gender']
+            student.phone = request.POST['phone']
+
+            grade_class_pk = request.POST['grade_class']
+            grade_class = GradeClass.objects.get(pk=grade_class_pk)
+            student.grade_class = grade_class
+            student.user.save()
+            student.save()
+
+            messages.success(request, '个人信息修改成功！')
+            return HttpResponseRedirect(reverse('student:student_personal_info'))
+        else:
+            errors = user_form.errors.as_data()
+            for key in errors.keys():
+                messages.warning(request, errors[key])
+
+            return HttpResponseRedirect(reverse('student:modify_personal_info'))
+    else:
+        grade_class = GradeClass.objects.all()
+        context = {'grade_class': grade_class}
+        return render(request, 'student/modify_personal_info.html', context=context)
+
+
+def reset_password(request):
+    student = Student.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        if request.POST['password'] == request.POST['confirm_password']:
+            student.user.set_password(request.POST['password'])
+            student.user.save()
+            messages.success(request, '修改密码成功！请返回重新登录')
+            return HttpResponseRedirect(reverse('student:student_personal_info'))
+        else:
+            messages.warning(request, '两次密码输入不匹配，请重新输入！')
+            return HttpResponseRedirect(reverse('student:reset_password'))
+    else:
+        return render(request, 'student/reset_password.html')
 

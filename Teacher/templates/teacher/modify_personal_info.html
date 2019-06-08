@@ -1,0 +1,30 @@
+{% extends "teacher/base.html" %}
+
+{% block head_title_block %}
+修改个人信息
+{% endblock %}
+
+{% block title_block %}
+<h3>修改个人信息</h3>
+{% endblock %}
+
+{% block navbar_block %}
+ <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav navbar-right">
+    </ul>
+</div>
+{% endblock %}
+
+{% block content_block%}
+<div class="container">
+    <form class="form-signin col-md-4 col-md-offset-3  mx-auto" method="POST" action="{% url 'teacher:modify_personal_info' %}">
+        {% csrf_token %}
+        <input type="text" name="name" class="form-control" placeholder="教师姓名" required>
+        <input type="tel" name="phone" class="form-control" placeholder="电话" required>
+        <input type="text" name="email" class="form-control" placeholder="邮箱" required>
+        <button class="btn btn-primary btn-block" type="submit">确定</button>
+        <a class="btn btn-primary btn-block" href="{% url 'teacher:teacher_personal_info' %}" role="button">返回</a>
+    </form>
+    <!-- <p class="mt-5 mb-3 text-muted">&copy; 华中农业大学 2019</p> -->
+</div>
+{% endblock %}

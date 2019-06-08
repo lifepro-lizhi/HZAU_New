@@ -9,7 +9,7 @@ class UserRegisterForm(forms.ModelForm):
 
     class Meta():
         model = User
-        fields = ('username', 'password')
+        fields = ('username', 'password', 'email')
 
 
 class UserLoginForm(forms.ModelForm):
@@ -22,7 +22,8 @@ class UserLoginForm(forms.ModelForm):
 
 class TeacherInfoForm(forms.ModelForm):
     name = forms.CharField(max_length=10)
+    phone = forms.CharField(max_length=20)
 
     class Meta():
         model = Teacher
-        fields = ('name', )
+        fields = ('name', 'phone')

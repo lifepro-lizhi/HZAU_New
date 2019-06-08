@@ -9,7 +9,15 @@ class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     student_id = models.CharField(max_length=20)
     name = models.CharField(max_length=10)
+
+    GENDER_CHOICE = [
+        ('male', '男'),
+        ('female', '女'),
+    ]
+    gender = models.CharField(max_length=6, choices=GENDER_CHOICE, default='male')
+
     grade_class = models.ForeignKey(GradeClass, on_delete=models.CASCADE)
+    phone = models.CharField(max_length=20)
     paper_result = models.ManyToManyField(Paper, through='PaperResult')
 
     def __str__(self):

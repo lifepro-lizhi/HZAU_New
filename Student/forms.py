@@ -10,7 +10,7 @@ class UserRegisterForm(forms.ModelForm):
 
     class Meta():
         model = User
-        fields = ('username', 'password')
+        fields = ('username', 'password', 'email')
 
 
 class UserLoginForm(forms.ModelForm):
@@ -26,6 +26,13 @@ class StudentInfoForm(forms.ModelForm):
     student_id = forms.CharField(max_length=20)
     grade_class = forms.ModelChoiceField(queryset=GradeClass.objects.all())
 
+    GENDER_CHOICES = [
+        ('male', '男'),
+        ('female', '女'),
+    ]
+    gender = forms.ChoiceField(choices=GENDER_CHOICES)
+    phone = forms.CharField(max_length=20)
+
     class Meta():
         model = Student
-        fields = ('name', 'student_id', 'grade_class')
+        fields = ('name', 'student_id', 'grade_class', 'gender', 'phone')

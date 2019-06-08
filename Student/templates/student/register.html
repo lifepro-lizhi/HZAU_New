@@ -32,13 +32,20 @@
         <input type="password" name="confirm_password" class="form-control" placeholder="重复密码" required>
         <input type="text" name="name" class="form-control" placeholder="学生姓名" required>
         <input type="text" name="student_id" class="form-control" placeholder="学号" required>
+        <input type="email" name="email" class="form-control" placeholder="邮箱" required>
+        <input type="tel" name="phone" class="form-control" placeholder="电话" required>
+        <select class="form-control " name="gender" required>
+            <option value="tip" selected disabled>性别</option>
+            <option value="male">男</option>
+            <option value="female">女</option>
+        </select>
         <select class="form-control " name="grade_class" required>
             <option value="tip" selected disabled>请选择年级和班级</option>
             {% for item in grade_class %}
             <option value="{{ item.pk }}">{{ item.title }}</option>
             {% endfor %}
-          </select>
-          <br>
+        </select>
+        <br>
         <button class="btn btn-primary btn-block" type="submit">注册</button>
         <a class="btn btn-primary btn-block" href="{% url 'basic:user_login' %}" role="button">返回</a>
     </form>
