@@ -8,6 +8,11 @@ class GradeClass(models.Model):
 
     def __str__(self):
         return self.title
+    
+    class Meta:
+        db_table = 'gradeclass'
+        verbose_name = '专业班级'
+        verbose_name_plural = '专业班级'
 
 
 # class Major(models.Model):

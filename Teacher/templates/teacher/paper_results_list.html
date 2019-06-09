@@ -30,7 +30,7 @@
                 <td>{{ paper.paper_maker.name }}</td>
                 <td>{{ paper.publish_date|date}}</td>
                 <td>{{ results.all|length }}</td>
-                <td><a href="{% url 'examination:paper_results' paper.pk %}">详情</a></td>
+                <td><a href="{% url 'examination:paper_results' paper.pk %}" class="btn btn-primary brn-sm">详情</a></td>
             </tr>
             {% endfor %}
         </tbody>

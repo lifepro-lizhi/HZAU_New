@@ -32,8 +32,7 @@ def register(request):
             student_with_same_id = Student.objects.all().filter(student_id=student_id).first()
             if student_with_same_id != None:
                 messages.warning(request, '存在相同学号的注册学生！请返回重新注册')
-                context = {'grade_class': grade_class}
-                return render(request, 'student/register.html', context=context)
+                return HttpResponseRedirect(reverse('student:register'))
 
             if request.POST['password'] == request.POST['confirm_password']:
                 user = user_form.save()
@@ -41,8 +40,7 @@ def register(request):
                 user.save()
             else:
                 messages.warning(request, '两次密码输入不匹配，请重新输入！')
-                context = {'grade_class': grade_class}
-                return render(request, 'student/register.html', context=context)
+                return HttpResponseRedirect(reverse('student:register'))
 
             student_info = student_info_form.save(commit=False)
             student_info.user = user
@@ -59,12 +57,19 @@ def register(request):
             messages.success(request, '注册成功！请返回重新登录')
             return HttpResponseRedirect(reverse('basic:user_login'))
         else:
+            if 'gender' not in request.POST.keys():
+                messages.warning(request, '未选择性别，请重新输入！')
+                return HttpResponseRedirect(reverse('student:register'))
+            
+            if 'grade_class' not in request.POST.keys():
+                messages.warning(request, '未选择专业，请重新输入！')
+                return HttpResponseRedirect(reverse('student:register'))
+
             errors = user_form.errors.as_data()
             for key in errors.keys():
                 messages.warning(request, errors[key])
 
-            context = {'grade_class': grade_class}
-            return render(request, 'student/register.html', context=context)
+            return HttpResponseRedirect(reverse('student:register'))
     else:
         context = {'grade_class': grade_class}
         return render(request, 'student/register.html', context=context)
@@ -311,7 +316,7 @@ def pick_random_paper(request, paper_id):
 
     paper_to_comment = PaperToComment.objects.filter(paper=paper, student=current_student).first()
     if paper_to_comment == None:
-        if paper_commits_count >= 5:
+        if paper_commits_count > 5:
             while len(paper_answers_to_add_comment) < 5:    # one student should do at least 5 comments
                 r = random.randint(0, paper_commits_count - 1)    # random pick a index
                 if r not in already_picked_index:    # insure the current index has not been selected 
@@ -363,24 +368,20 @@ def do_comment(request, paper_answer_id):
     if request.method == 'POST':
         for key in request.POST.keys():
             if 'essay_comment' in key:
-                print('111')
                 essay_answer_id = int(key[key.find('.') + 1 :])
                 essay_answer = EssayAnswer.objects.get(pk=essay_answer_id)
 
                 essay_comment = EssayComment.objects.filter(essay_answer=essay_answer, student=student).first()
                 if essay_comment == None:
-                    print('222')
                     essay_comment = EssayComment()
                     essay_comment.essay_answer = essay_answer
                     essay_comment.student = student
                 
                 if 'essay_comment_comment' in key:
-                    print('333')
                     comment = request.POST[key]
                     essay_comment.comment = comment
 
                 if 'essay_comment_score' in key:
-                    print('444')
                     score = request.POST[key]
                     essay_comment.score = score
                 
@@ -426,8 +427,17 @@ def essay_comment_detail(request, result_id):
     student = paper_result.student
     paper_answer = PaperAnswer.objects.get(paper=paper, student=student)
 
+    # teacher = Teacher.objects.all().filter(user=request.user).first()
+    # if teacher != None:
+    #     show_comment_author = True
+    # else:
+    #     show_comment_author = False
+    show_comment_author = True
+
+
     essay_answers = paper_answer.essayanswer_set.all()
-    context = {'essay_answers': essay_answers}
+    context = {'essay_answers': essay_answers,
+               'show_comment_author': show_comment_author}
 
     return render(request, 'student/essay_comment_detail.html', context=context)
     

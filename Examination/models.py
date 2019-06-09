@@ -33,6 +33,11 @@ class Paper(models.Model):
             self.essay_question_total_score += question.point
 
         super().save(*args, **kwargs)  # Call the "real" save() method.
+    
+    class Meta:
+        db_table = 'paper'
+        verbose_name = '试卷'
+        verbose_name_plural = '试卷'
 
 
 class Multiple_Choice_Question(models.Model):
@@ -62,6 +67,11 @@ class Multiple_Choice_Question(models.Model):
         super().delete(*args, **kwargs)  # Call the "real" delete() method.
         self.paper.save()
 
+    class Meta:
+        db_table = 'multiple_choice_question'
+        verbose_name = '选择题'
+        verbose_name_plural = '选择题'
+
 
 class Essay_Question(models.Model):
     paper = models.ForeignKey(Paper, on_delete=models.CASCADE, null=True)
@@ -79,5 +89,10 @@ class Essay_Question(models.Model):
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)  # Call the "real" delete() method.
         self.paper.save()
+
+    class Meta:
+        db_table = 'essay_question'
+        verbose_name = '问答题'
+        verbose_name_plural = '问答题'
 
 

@@ -9,6 +9,7 @@
 <div class="container">
 <br><br>
 
+
 <h2 class="text-center">{{ essay_answers.0.paper_answer.paper.title }}（问答题互评详情）</h2>
 <br>
 
@@ -38,15 +39,19 @@
         <div class="card">
             <div class="card-body">
                 <h6 class="card-title text-warning">学生评论</h5>
-                {% for essay_comment in essay_answer.essaycomment_set.all %}
-                    <p class="card-text">{{ forloop.counter }}.
-                        {% if show_comment_author == True %}
-                            互评人：{{ essay_comment.student.name }},
-                        {% endif %} 
-                        互评分数：{{ essay_comment.score }}</p>
-                    <p class="card_text">{{ essay_comment.comment}}</p>
-                {% endfor %}
-                <h6 class="cart-title text-warning">平均分：{% get_essay_average_score essay_answer.essaycomment_set.all %}</h6>
+                {% if essay_answer.essaycomment_set.all|length == 0 %}
+                    <h6>该回答还未有学生评论</h6>
+                {% else %}
+                    {% for essay_comment in essay_answer.essaycomment_set.all %}
+                        <p class="card-text">{{ forloop.counter }}.
+                            {% if show_comment_author == True %}
+                                互评人：{{ essay_comment.student.name }},&nbsp;&nbsp;&nbsp;&nbsp;   
+                            {% endif %} 
+                            互评分数：{{ essay_comment.score }}</p>
+                        <p class="card_text">&nbsp;&nbsp;&nbsp;&nbsp;{{ essay_comment.comment}}</p>
+                    {% endfor %}
+                    <h6 class="cart-title text-warning">平均分：{% get_essay_average_score essay_answer.essaycomment_set.all %}</h6>
+                {% endif %}
             </div>
         </div>
     </div>

@@ -22,6 +22,11 @@ class Student(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        db_table = 'student'
+        verbose_name = '学生'
+        verbose_name_plural = '学生'
 
 
 class PaperResult(models.Model):
@@ -35,6 +40,11 @@ class PaperResult(models.Model):
 
     def __str__(self):
         return "{} ( {} )".format(self.paper.title, self.student.name)
+    
+    class Meta:
+        db_table = 'paper_result'
+        verbose_name = '试卷成绩'
+        verbose_name_plural = '试卷成绩'
 
 
 # collection of essay_answers for specific paper and student
@@ -42,6 +52,11 @@ class PaperAnswer(models.Model):
     paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     comments_count = models.IntegerField(default=0)
+
+    class Meta:
+        db_table = 'paper_answer'
+        verbose_name = '学生问答题回答(指定试卷)'
+        verbose_name_plural = '学生问答题回答(指定试卷)'
 
 
 # one single essay_answer for specific essay_question and student
@@ -52,6 +67,11 @@ class EssayAnswer(models.Model):
 
     def __str__(self):
         return "{} - {} ({})".format(self.essay_question.paper.title, self.essay_question.title, student.name)
+    
+    class Meta:
+        db_table = 'essay_answer'
+        verbose_name = '学生问答题回答(指定题目)'
+        verbose_name_plural = '学生问答题回答(指定题目)'
 
 
 # comment for specific essay_answer
@@ -83,9 +103,19 @@ class EssayComment(models.Model):
         
         paper_result.essay_question_result = total_score
         paper_result.save()
+    
+    class Meta:
+        db_table = 'essay_comment'
+        verbose_name = '问答题评论'
+        verbose_name_plural = '问答题评论'
 
 
 class PaperToComment(models.Model):
     paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)  # student to do the comment
     paper_answer_ids = models.CharField(max_length=100)  # format like '1,2,3,4,5'
+
+    class Meta:
+        db_table = 'paper_to_comment'
+        verbose_name = '待评论试卷'
+        verbose_name_plural = '待评论试卷'
