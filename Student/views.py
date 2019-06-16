@@ -62,7 +62,7 @@ def register(request):
                 return HttpResponseRedirect(reverse('student:register'))
             
             if 'grade_class' not in request.POST.keys():
-                messages.warning(request, '未选择专业，请重新输入！')
+                messages.warning(request, '未选择专业班级，请重新输入！')
                 return HttpResponseRedirect(reverse('student:register'))
 
             errors = user_form.errors.as_data()
@@ -93,7 +93,8 @@ def student_login(request):
                 # messages.success(request, '登录成功！')
                 # return HttpResponseRedirect(reverse('student:index'))
                 # return redirect('http://144.202.122.52/unity_index.html')
-                return redirect('http://47.111.185.160/insect/unity_index.html')
+                # return redirect('http://47.111.185.160/insect/unity_index.html')
+                return redirect('http://211.69.130.12/insect/index.html')
             else:
                 messages.warning(request, '用户不处于活跃状态')
                 return HttpResponseRedirect(reverse('basic:user_login'))

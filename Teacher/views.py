@@ -216,7 +216,7 @@ def reset_password(request):
 
 @login_required
 def grade_class_list(request):
-    grade_class = GradeClass.objects.all()
+    grade_class = GradeClass.objects.all().order_by('id')
     context = {'grade_class': grade_class}
     return render(request, 'teacher/grade_class_list.html', context=context)
 
