@@ -25,7 +25,7 @@
             }
 
             /* Style the button and place it in the middle of the container/image */
-            .container .btn1{
+            .container .guest_name{
             position: absolute;
             padding: 12px 24px;
             cursor: pointer; 
@@ -37,24 +37,12 @@
             z-index: 3;
             }
 
-            .container .btn2{
+            .container .btn1{
             position: absolute;
             padding: 12px 24px;
             cursor: pointer; 
             border-radius: 5px; 
-            top: 65%;
-            left:50%;
-            transform: translate(-50%, -50%); 
-            -ms-transform: translate(-50%, -50%);
-            z-index: 3;
-            }
-
-            .container .btn3{
-            position: absolute;
-            padding: 12px 24px;
-            cursor: pointer; 
-            border-radius: 5px; 
-            top: 75%;
+            top: 70%;
             left:50%;
             transform: translate(-50%, -50%); 
             -ms-transform: translate(-50%, -50%);
@@ -66,10 +54,12 @@
 
     <body class="text-center">
         <div class="container">
+            <form action="{% url 'basic:guest_name' %}" method="POST">
+                {% csrf_token %}
+                <input class="guest_name" type="text" name="guest_name" placeholder="请输入游客名字" required="required">
+                <button class="btn1 btn-primary" type="submit">确定</button>
+            </form>
             <img src="{% static 'basic/image/start_page.jpg' %}" class="img">
-            <a class="btn1" href="{% url 'basic:user_login' %}"><img src="{% static 'basic/image/login1.png' %}"></a>
-            <a class="btn2" href="{% url 'basic:user_login' %}"><img src="{% static 'basic/image/register1.png' %}"></a>
-            <a class="btn3" href="{% url 'basic:guest_login' %}"><img src="{% static 'basic/image/guest.png' %}"></a>
 
         </div>
     </body>

@@ -27,6 +27,7 @@ urlpatterns = [
     path('student/', include('Student.urls')),
     path('video/', include('Video.urls')),
     path('user_selection/', include('Basic.urls')),
+    path('history/', include('History.urls')),
 ]
 
 admin.site.site_header = '华中农业大学 植物科学技术学院 后台管理系统'

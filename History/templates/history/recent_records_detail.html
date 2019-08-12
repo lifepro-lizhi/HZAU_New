@@ -1,0 +1,40 @@
+{% extends "teacher/base.html" %}
+
+{% block head_title_block %}
+近30天访问记录详情
+{% endblock %}
+
+{% block title_block %}
+<h3>近30天访问记录详情</h3>
+{% endblock %}
+
+ {% block content_block %}
+
+ {% load static %}
+
+ <div class="container">
+ <table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">访问日期</th>
+            <th scope="col">姓名</th>
+            <th scope="col">身份</th>
+            <th scope="col">IP地址</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in records %}
+        <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ record.access_date }}</td>
+            <td>{{ record.name }}</td>
+            <td>{{ record.user_type }}</td>
+            <td>{{ record.ip_address }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+ {% endblock %}

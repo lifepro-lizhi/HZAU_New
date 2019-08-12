@@ -1,8 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from Student.models import Student
 from Teacher.models import Teacher
+from History.models import HistoryRecord
+from History.views import record_access_history
+from datetime import date
 
 # Create your views here.
 
@@ -27,6 +30,17 @@ def user_selection(request):
 
 def user_login(request):
     return render(request, 'student/login.html')
+
+
+def guest_login(request):
+    return render(request, 'basic/guest.html')
+
+
+def guest_name(request):
+    if request.method == 'POST':
+        if request.POST['guest_name'] is not "":
+            record_access_history(request, "游客", request.POST['guest_name'])
+            return redirect('http://47.111.185.160/insect/unity_index.html')
 
 
 def start(request):

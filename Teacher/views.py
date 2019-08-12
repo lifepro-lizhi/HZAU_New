@@ -10,6 +10,7 @@ from Teacher.models import Teacher
 from Student.models import Student, PaperResult
 from GradeClass.models import GradeClass
 from Video.models import Video
+from History.views import record_access_history
 import csv
 import io
 from reportlab.pdfgen import canvas
@@ -72,6 +73,7 @@ def teacher_login(request):
 
             if user.is_active:
                 login(request, user)
+                record_access_history(request, "教师", teacher.name)
                 # messages.success(request, '登录成功！')
                 return HttpResponseRedirect(reverse('teacher:index'))
                 # return redirect('http://144.202.122.52/unity_index.html')

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'Student',
     'Video',
     'GradeClass',
+    'History',
 ]
 
 MIDDLEWARE = [

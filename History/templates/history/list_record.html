@@ -1,0 +1,38 @@
+{% extends "teacher/base.html" %}
+
+{% block head_title_block %}
+访问记录
+{% endblock %}
+
+{% block title_block %}
+<h3>访问记录</h3>
+{% endblock %}
+
+ {% block content_block %}
+
+ {% load static %}
+
+ <div class="container">
+ <table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">总访问数</th>
+            <th scope="col">教师</th>
+            <th scope="col">学生</th>
+            <th scope="col">游客</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ total_count }}</td>
+            <td>{{ teacher_count }}</td>
+            <td>{{ student_count }}</td>
+            <td>{{ guest_count }}</td>
+            <td><a href="{% url 'history:recent_records_detail' %}" class="btn btn-primary btn-sm">近30天访问记录</a></td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+ {% endblock %}
