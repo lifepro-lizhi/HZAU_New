@@ -30,7 +30,8 @@ urlpatterns = [
     path('history/', include('History.urls')),
 ]
 
-admin.site.site_header = '华中农业大学 植物科学技术学院 后台管理系统'
+# admin.site.site_header = '华中农业大学 植物科学技术学院 后台管理系统'
+admin.site.site_header = '黄冈师范学院 生物与农业资源学院 后台管理系统'
 
 if settings.DEBUG is True:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
