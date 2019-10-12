@@ -25,13 +25,8 @@ SECRET_KEY = 'tcq_$qx^#z1x9#d0swrtb!ovgdrm)2r@70mlyrd%r260cs%rbt'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['47.111.185.160',
-                 'www.sskj3d.com',
-                #  '144.202.122.52',
-                #  '211.69.130.12',
-                '211.69.130.84',
+ALLOWED_HOSTS = ['211.69.130.33',
                  '127.0.0.1']
-
 
 # Application definition
 
@@ -87,15 +82,14 @@ WSGI_APPLICATION = 'HZAU_Management_System.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        # 'ENGINE': 'django.db.backends.postgresql',
-        # # 'NAME': 'hzau_project_database',
-        # 'NAME': 'butterfly_project_database',
-        # 'USER': 'hzau_admin',
-        # 'PASSWORD': '12345qqq',
-        # 'HOST': 'localhost',
-        # 'PORT': '',
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'sskj_bird_project_database',
+        'USER': 'hzau_admin',
+        'PASSWORD': 'admin12345',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
