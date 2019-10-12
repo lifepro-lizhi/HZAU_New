@@ -20,18 +20,17 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('index/', include('Basic.urls')),
-    path('examination/', include('Examination.urls')),
-    path('teacher/', include('Teacher.urls')),
-    path('student/', include('Student.urls')),
-    path('video/', include('Video.urls')),
-    path('user_selection/', include('Basic.urls')),
-    path('history/', include('History.urls')),
+    path('food/admin/', admin.site.urls),
+    path('food/index/', include('Basic.urls')),
+    path('food/examination/', include('Examination.urls')),
+    path('food/teacher/', include('Teacher.urls')),
+    path('food/student/', include('Student.urls')),
+    path('food/video/', include('Video.urls')),
+    path('food/user_selection/', include('Basic.urls')),
+    path('food/history/', include('History.urls')),
 ]
 
-# admin.site.site_header = '华中农业大学 植物科学技术学院 后台管理系统'
-admin.site.site_header = '黄冈师范学院 生物与农业资源学院 后台管理系统'
+admin.site.site_header = '华中农业大学 水产学院 后台管理系统'
 
 if settings.DEBUG is True:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
