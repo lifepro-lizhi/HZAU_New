@@ -40,7 +40,7 @@ def guest_name(request):
     if request.method == 'POST':
         if request.POST['guest_name'] is not "":
             record_access_history(request, "游客", request.POST['guest_name'])
-            return redirect('http://211.69.130.114:8000/bird/index.html')
+            return redirect('http://211.69.130.114:9000/bird/index.html')
 
 
 def start(request):
